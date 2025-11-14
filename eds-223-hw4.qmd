@@ -1,0 +1,18 @@
+---
+title: "eds-223-hw4"
+format: html
+---
+
+# **Homework Assignment 4:** Prioritizing potential aquaculture
+
+## Learning Outcomes
+
+This assignment will reinforce key concepts in geospatial analysis by practicing the following:
+
+-   combining vector/raster data
+
+-   resampling raster data
+
+-   masking raster data
+
+-   map algebra
