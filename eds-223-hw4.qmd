@@ -71,6 +71,7 @@ library(tmap) # Load "tmap" for functions to create and layer maps
 library(kableExtra) # Load "kableExtra" for table formatting
 library(stars) # Load "stars" for integration with "sf"
 library(raster)
+library(terra)
 ```
 
 ```{r}
@@ -88,8 +89,10 @@ depth <- raster(here::here("data", "depth.tif"))
 sst_years <- list.files(path="data/", # File path
                         pattern = "average_annual", # File names matching pattern
                         full.names = TRUE) # Reference entire file names matching                                             this pattern
-# Stack all rasters
-sst <- stack(sst_years)
+# Stack all rasters (stack() used earlier)
+sst <- rast(sst_years)
+
+plot(sst)
 ```
 
 Double check CRS
@@ -141,7 +144,7 @@ avg_sst <- mean(sst)
 
 ```{r}
 avg_sst <- avg_sst - 273.15
-avg_sst
+plot(avg_sst) 
 ```
 
 -   crop depth raster to match the extent of the SST raster
@@ -153,6 +156,11 @@ avg_sst
 -   check that the depth and SST match in resolution, extent, and coordinate reference system
 
     -   hint: can the rasters be stacked?
+
+```{r}
+# Depth has slightly different resolutions, need to resample
+?resample
+```
 
 ### **Find suitable locations**
 
