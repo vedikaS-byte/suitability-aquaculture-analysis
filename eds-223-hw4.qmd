@@ -1,6 +1,16 @@
 ---
 title: "eds-223-hw4"
 format: html
+author: "Vedika Shirtekar" 
+date: "11/10/2025"
+format:
+  pdf: 
+    code-fold: false
+editor: 
+  markdown: 
+    wrap: 72
+#editor_options: 
+  #chunk_output_type: console
 ---
 
 # **Homework Assignment 4:** Prioritizing potential aquaculture
@@ -17,7 +27,7 @@ This assignment will reinforce key concepts in geospatial analysis by practicing
 
 -   map algebra
 
-For this assignment, you are tasked with determining which Exclusive Economic Zones (EEZ) on the West Coast of the US are best suited to developing marine aquaculture for several species of oysters ***and*** a species of your choice. Suitable locations will be determined based on range of suitable sea surface temperature (SST) and depth values for the species.
+For this assignment, you are tasked with determining [which Exclusive Economic Zones (EEZ) on the West Coast of the US are best suited to developing marine aquaculture for several species of oysters ***and*** a species of your choice.]{.underline} Suitable locations will be determined based on range of suitable sea surface temperature (SST) and depth values for the species.
 
 ## Description
 
@@ -49,15 +59,90 @@ To start, we need to load all necessary data and make sure it has the coordinate
 
     -   combine SST rasters into a raster stack
 
+```{r}
+#| output: false
+# Import packages
+library(here) # Load "here" to locate and reference files
+library(tidyverse) # Load the tidyverse" for data cleaning
+library(sf) # Load "sf" for GIS analysis
+library(raster) # Load "raster" for accessing raster data types
+library(ggplot2) # Load "ggplot2" for data visualization
+library(tmap) # Load "tmap" for functions to create and layer maps
+library(kableExtra) # Load "kableExtra" for table formatting
+library(stars) # Load "stars" for integration with "sf"
+library(raster)
+```
+
+```{r}
+# West Coast EEZ
+eez <- read_sf(here::here("data", "wc_regions_clean.shp"))
+```
+
+```{r}
+# Bathymetry raster
+depth <- raster(here::here("data", "depth.tif"))
+```
+
+```{r}
+# Create a list of the tif files for SST
+sst_years <- list.files(path="data/", # File path
+                        pattern = "average_annual", # File names matching pattern
+                        full.names = TRUE) # Reference entire file names matching                                             this pattern
+# Stack all rasters
+sst <- stack(sst_years)
+```
+
+Double check CRS
+
+```{r}
+# Create list of spatial objects
+spatial_objects <- list(eez, depth, sst)
+
+# Use eez's CRS as reference
+ref_crs <- st_crs(spatial_objects$eez)
+```
+
+```{r}
+# Check and transform each tile with if/else statements
+if (st_crs(spatial_objects$depth) != ref_crs) {
+  warning("depth CRS does not match. 
+          Transforming to match eez CRS.")
+  spatial_objects$depth <- st_transform(spatial_objects$depth, ref_crs)
+} else {
+  message("depth CRS already matches eez CRS.")
+}
+```
+
+```{r}
+# Check and transform each tile with if/else statements
+if (st_crs(spatial_objects$sst) != ref_crs) {
+  warning("sst CRS does not match. 
+          Transforming to match eez CRS.")
+  spatial_objects$sst <- st_transform(spatial_objects$sst, ref_crs)
+} else {
+  message("sst CRS already matches eez CRS.")
+}
+```
+
 ### **Process data**
 
 Next, we need to process the SST and depth data so that they can be combined. In this case the SST and depth data have slightly different resolutions, extents, and positions.
 
 -   find the mean SST from 2008-2012 (e.g. create single raster of average SST)
 
+```{r}
+# Mean sst
+avg_sst <- mean(sst)
+```
+
 -   convert average SST from Kelvin to Celsius
 
     -   hint: subtract by 273.15
+
+```{r}
+avg_sst <- avg_sst - 273.15
+avg_sst
+```
 
 -   crop depth raster to match the extent of the SST raster
 
