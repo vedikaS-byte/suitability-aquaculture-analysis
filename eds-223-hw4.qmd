@@ -76,7 +76,7 @@ library(terra)
 
 ```{r}
 # West Coast EEZ
-eez <- read_sf(here::here("data", "wc_regions_clean.shp"))
+eez <- vect(here::here("data", "wc_regions_clean.shp"))
 ```
 
 ```{r}
@@ -139,7 +139,8 @@ Next, we need to process the SST and depth data so that they can be combined. In
 
 ```{r}
 # Mean sst
-sst <- project(sst, depth)
+#sst <- project(sst, depth)
+depth <- project(depth, sst)
 
 avg_sst <- mean(sst)
 plot(avg_sst)
@@ -286,10 +287,14 @@ multiply <- function(x,y){
   return(multi_raster)
   }
 
-#plot(lapp(x = c(avg_sst_reclass,depth_reclass), fun = multiply))
-
 avg_sst_depth <- lapp(x = c(avg_sst_reclass,depth_reclass), fun = multiply)
 plot(avg_sst_depth)
+
+view(avg_sst_depth)
+#tm_shape(avg_sst_depth) + tm_raster()
+res(avg_sst_reclass) == res(depth_reclass)
+
+
 ```
 
 ### **Determine the most suitable EEZ**
@@ -305,5 +310,35 @@ We want to determine the total suitable area within each EEZ in order to rank zo
     -   hint: it might be helpful to rasterize the EEZ data
 
 ```{r}
+## suitable cells within west coast eezs
+# Note: eez is an sf.. convert to terra?
+#eez_vect <- vect(eez)
 
+#plot(eez)
+crs(eez) == crs(avg_sst_depth) # not match, reproject
+eez <- project(eez, avg_sst_depth)
+crs(eez) == crs(avg_sst_depth) # now match, reproject
+
+
+avg_sst_depth_suitable <- ifel(avg_sst_depth == 0, NA, 1)
+
+plot(avg_sst_depth_suitable)
+
+
+crs(eez) == crs(avg_sst_depth_suitable) 
+
+
+
+```
+
+```{r}
+
+plot(mask(avg_sst_depth_suitable, eez))
+
+suitable_cells_eez <-  mask(avg_sst_depth_suitable, eez)
+suitable_cells_eez
+# inherited method not found, need to do spatvector recognition for polygons
+?extract 
+eez
+tm_shape(eez) + tm_polygons(fill = "rgn")+ tm_shape(suitable_cells_eez) + tm_raster() 
 ```
