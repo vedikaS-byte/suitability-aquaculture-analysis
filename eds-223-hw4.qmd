@@ -420,19 +420,16 @@ tm_layout( # Center title outside bounding box
 ```{r}
 # table with kableextra for zonal stats 
 # need: region and total area covered as well as how many places within each region
-eez_final
 eez_final %>% st_as_sf() %>% st_drop_geometry %>% 
   dplyr::select(region = rgn,
-         total_area_km2 = area_km2,
-         n_suitable_cells = area) %>%   
-  view(eez_final)
-kable( 
-        caption = "Zonal Statistics of Suitable Areas by EEZ") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+         suitable_area_km2,
+         total_area_km2 = area_km2
+         ) %>%   mutate(suitable_area_km2 = round(suitable_area_km2, 2), 
+                        percent_suitable = round((suitable_area_km2 / total_area_km2) * 100, 1)) %>% dplyr::select(-total_area_km2) %>%
+kable(caption = "Amount of Suitable Areas by EEZ for Oyster Preferences") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"),
                 full_width = FALSE,
                 position = "center")
-
-
 ```
 
 ## Create a generalizable funciton 
