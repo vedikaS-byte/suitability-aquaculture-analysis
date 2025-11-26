@@ -15,7 +15,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# **Homework Assignment 4:** Prioritizing potential aquaculture
+# **Ocean Superfarms: Finding the Best Spots to Grow Seafood**
 
 ## Learning Outcomes
 
@@ -322,26 +322,23 @@ eez <- project(eez, avg_sst_depth)
 crs(eez) == crs(avg_sst_depth) # now match, reproject
 
 
-avg_sst_depth_suitable <- ifel(avg_sst_depth == 0, NA, 1)
-
-plot(avg_sst_depth_suitable)
-
-
-crs(eez) == crs(avg_sst_depth_suitable) 
-
-
-
 ```
 
 ```{r}
+ # eez_rast <- rasterize(eez, avg_sst_depth_suitable, field = "rgn")
+# 
+# 
+# suitable_cells_eez <-  mask(avg_sst_depth_suitable, eez)
+# 
+# 
+# 
+# cellarea <- cellSize(suitable_cells_eez, unit = "km")
+# suitablearea <- cellarea * suitable_cells_eez
+# 
+# 
+# area_eez<- zonal(cellarea * suitable_cells_eez, eez_rast, fun = "sum", na.rm = T) %>%  rename(suitable_area_km2 = area)
 
-plot(mask(avg_sst_depth_suitable, eez))
-
-suitable_cells_eez <-  mask(avg_sst_depth_suitable, eez)
-suitable_cells_eez
-
-plot(suitable_cells_eez)
-
+  
 # 
 # cellSize
 # extract (sum)
@@ -352,22 +349,41 @@ plot(suitable_cells_eez)
 ```
 
 ```{r}
-# calculate cell areas (m²)
-cell_area <- cellSize(avg_sst_depth_suitable, unit = "km")
+# Find areas of interest
+avg_sst_depth_suitable <- ifel(avg_sst_depth == 0, NA, 1)
+
+plot(avg_sst_depth_suitable)
+
+
+crs(eez) == crs(avg_sst_depth_suitable) 
+```
+
+```{r}
+# rasterize eez regions
+eez_rast <- rasterize(eez, avg_sst_depth_suitable, field = "rgn")
+
+# identify suitable cells in mask 
+suitable_cells_eez <-  mask(avg_sst_depth_suitable, eez)
+
+#calculate cell areas (m^2)
+# cell_area <- cellSize(avg_sst_depth_suitable, unit = "km")
+cell_area <- cellSize(suitable_cells_eez, unit = "km")
 
 # mask areas by suitability 
 # keep area only for suitable cells
-suitable_area <- cell_area * avg_sst_depth_suitable
+#suitable_area <- cell_area * avg_sst_depth_suitable
+suitable_area <- cell_area * suitable_cells_eez
 
 # sum suitable area in each eez polygon
-# this will return a data frame
-ea <- extract(suitable_area, eez, fun = sum, na.rm = TRUE)
-
+# this will return data frame
+#ea <- extract(suitable_area, eez, fun = sum, na.rm = TRUE)
+#ea <- extract(suitable_area, eez_rast, fun = sum, na.rm = TRUE)
+area_eez<- zonal(cellarea * suitable_cells_eez, eez_rast, fun = "sum", na.rm = T) %>%  rename(suitable_area_km2 = area)
 
 # join extracted results back to eez
 eez_sf <- st_as_sf(eez) # to have geometry
 eez_joined <- eez_sf %>%
-  left_join(ea, by = c("rgn_id"= "ID"))
+  left_join(area_eez, by = "rgn_id")
 
 # convert back to spatvector
 eez_final <- vect(eez_joined)
@@ -378,12 +394,11 @@ eez_final <- vect(eez_joined)
 # plot
 tm_shape(eez_final) +
   tm_polygons(
-    "area",
+    "suitable_area_km2",
     palette = "-mako",
     style = "cont", # Continuous
-    title = "Suitable Area (km²)",
-    #n = 5
-  ) +
+    title = "Suitable Area (km²)"
+  ) +  tm_text("rgn", size = 0.5, col = "white", fontface = "bold",  xmod = -.5) +
 tm_layout( # Center title outside bounding box
     main.title = "Suitable Areas for Oyster Aquaculture in California EEZs \n          Based on Preferred Temperature and Depth",
      main.title.size = 1.5,
@@ -406,7 +421,16 @@ tm_layout( # Center title outside bounding box
 # table with kableextra for zonal stats 
 # need: region and total area covered as well as how many places within each region
 eez_final
-
+eez_final %>% st_as_sf() %>% st_drop_geometry %>% 
+  dplyr::select(region = rgn,
+         total_area_km2 = area_km2,
+         n_suitable_cells = area) %>%   
+  view(eez_final)
+kable( 
+        caption = "Zonal Statistics of Suitable Areas by EEZ") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+                full_width = FALSE,
+                position = "center")
 
 
 ```
@@ -423,6 +447,8 @@ eez_final
 
 # species preferences defined before function
 species_preference <- function(min_temp, max_temp, min_depth, max_depth, species_name){ 
+  
+  # assume files have been loaded in already with matching crs checks
   
   
   
