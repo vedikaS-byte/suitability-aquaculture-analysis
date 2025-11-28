@@ -1,16 +1,13 @@
 ---
 title: "Ocean Superfarms: Finding the Best Spots to Grow Seafood"
-format: html
 author: "Vedika Shirtekar" 
-date: "11//2025"
+date: "11/28/2025"
 format:
   pdf: 
     code-fold: false
 editor: 
   markdown: 
     wrap: 72
-#editor_options: 
-  #chunk_output_type: console
 editor_options: 
   chunk_output_type: console
 ---
@@ -19,7 +16,8 @@ editor_options:
 
 ## Learning Outcomes
 
-This assignment will reinforce key concepts in geospatial analysis by practicing the following:
+This assignment will reinforce key concepts in geospatial analysis by
+practicing the following:
 
 -   combining vector/raster data
 
@@ -29,11 +27,17 @@ This assignment will reinforce key concepts in geospatial analysis by practicing
 
 -   map algebra
 
-For this assignment, you are tasked with determining [which Exclusive Economic Zones (EEZ) on the West Coast of the US are best suited to developing marine aquaculture for several species of oysters ***and*** a species of your choice.]{.underline} Suitable locations will be determined based on range of suitable sea surface temperature (SST) and depth values for the species.
+For this assignment, you are tasked with determining [which Exclusive
+Economic Zones (EEZ) on the West Coast of the US are best suited to
+developing marine aquaculture for several species of oysters ***and*** a
+species of your choice.]{.underline} Suitable locations will be
+determined based on range of suitable sea surface temperature (SST) and
+depth values for the species.
 
 ## Description
 
-To make your workflow generalizable, you must create a function that has the following characteristics:
+To make your workflow generalizable, you must create a function that has
+the following characteristics:
 
 -   **arguments:**
 
@@ -49,9 +53,12 @@ To make your workflow generalizable, you must create a function that has the fol
 
         -   species name should be included in the map’s title
 
+## Part 1: Map of Suitable Locations for Oyster Aquaculture
+
 ### **Prepare data**
 
-To start, we need to load all necessary data and make sure it has the coordinate reference system.
+To start, we need to load all necessary data and make sure it has the
+coordinate reference system.
 
 -   shapefile for the West Coast EEZ
 
@@ -135,9 +142,12 @@ if (st_crs(spatial_objects$sst) != ref_crs) {
 
 ### **Process data**
 
-Next, we need to process the SST and depth data so that they can be combined. In this case the SST and depth data have slightly different resolutions, extents, and positions.
+Next, we need to process the SST and depth data so that they can be
+combined. In this case the SST and depth data have slightly different
+resolutions, extents, and positions.
 
--   find the mean SST from 2008-2012 (e.g. create single raster of average SST)
+-   find the mean SST from 2008-2012 (e.g. create single raster of
+    average SST)
 
 ```{r}
 # Mean sst
@@ -161,7 +171,8 @@ plot(avg_sst)
 
 -   note: the resolutions of the SST and depth data do not match
 
-    -   resample the depth data to match the resolution of the SST data using the nearest neighbor approach
+    -   resample the depth data to match the resolution of the SST data
+        using the nearest neighbor approach
 
 ```{r}
 # Depth has slightly different resolutions, need to resample
@@ -170,7 +181,8 @@ plot(avg_sst)
 #plot(depth_resampled)
 ```
 
--   check that the depth and SST match in resolution, extent, and coordinate reference system
+-   check that the depth and SST match in resolution, extent, and
+    coordinate reference system
 
     -   hint: can the rasters be stacked?
 
@@ -213,9 +225,11 @@ ext(depth_sst_crop) == ext(depth)
 
 ### **Find suitable locations**
 
-To find suitable locations for marine aquaculture, we’ll need to find locations that are suitable in terms of both SST and depth.
+To find suitable locations for marine aquaculture, we’ll need to find
+locations that are suitable in terms of both SST and depth.
 
--   reclassify SST and depth data into locations that are suitable for oysters
+-   reclassify SST and depth data into locations that are suitable for
+    oysters
 
     -   hint: set suitable values to `1` and unsuitable values to `0`
 
@@ -296,7 +310,9 @@ res(avg_sst_reclass) == res(depth_reclass)
 
 ### **Determine the most suitable EEZ**
 
-We want to determine the total suitable area within each EEZ in order to rank zones by priority. To do so, we need to find the total area of suitable locations within each EEZ.
+We want to determine the total suitable area within each EEZ in order to
+rank zones by priority. To do so, we need to find the total area of
+suitable locations within each EEZ.
 
 -   select suitable cells within West Coast EEZs
 
@@ -438,7 +454,43 @@ kable(caption = "Amount of Suitable Areas by EEZ for Oyster Preferences") %>%
                 position = "center")
 ```
 
-## Create a generalized function
+## Part 2: Generalized Function of Aquaculture-Important Species Preferences
+
+1.  Need to clear environment
+2.  Define cells to have as context prior to function
+3.  Run function for regenerated map
+
+```{r}
+# clear environment
+#rm(list = ls())
+```
+
+```{r}
+# load in libraries again
+library(here) # Load "here" to locate and reference files
+library(tidyverse) # Load the tidyverse" for data cleaning
+library(sf) # Load "sf" for GIS analysis
+library(raster) # Load "raster" for accessing raster data types
+library(ggplot2) # Load "ggplot2" for data visualization
+library(tmap) # Load "tmap" for functions to create and layer maps
+library(kableExtra) # Load "kableExtra" for table formatting
+library(stars) # Load "stars" for integration with "sf"
+#library(raster) 
+library(terra) 
+```
+
+```{r}
+# Load in data again
+
+
+
+
+
+```
+
+```{r}
+# perform checks for matching CRS
+```
 
 ```{r}
 # define multiply function for raster
@@ -449,14 +501,11 @@ multiply <- function(x,y){
 ```
 
 ```{r}
-# To make your workflow generalizable, you must create a function that has the following characteristics:
-# 
-# arguments:
+# This function takes arguments:
 # minimum and maximum sea surface temperature
 # minimum and maximum depth
 # species name
 
-# species preferences defined before function
 species_preference <- function(min_temp, max_temp, min_depth, max_depth, species_name){ 
   
 ### # assume files have been loaded in already with matching crs checks
@@ -470,7 +519,7 @@ avg_sst <- mean(sst)
 avg_sst <- avg_sst - 273.15
 
 # match crs
-crs(avg_sst) == crs(depth) # match
+#crs(avg_sst) == crs(depth) # match
 
 
 #avg_sst <- project(avg_sst, depth)
@@ -508,13 +557,14 @@ depth_reclass <- classify(depth_sst_crop, rcl = reclass_matrix_depth)
 
 ###___________________________
 # find locations that satisfy both SST and depth conditions
-
 avg_sst_depth <- lapp(x = c(avg_sst_reclass,depth_reclass), fun = multiply)
 
 ## Part 4: find suitable locations within EEZ
 #crs(eez) == crs(avg_sst_depth) # not match, reproject
 eez <- project(eez, avg_sst_depth)
 
+# Find areas of interest
+avg_sst_depth_suitable <- ifel(avg_sst_depth == 0, NA, 1)
 
 
 # rasterize eez regions
@@ -556,7 +606,7 @@ tm_shape(area_eez) +
   tm_text("rgn", size = 0.5, col = "white", fontface = "bold",  xmod = -.5) +
   
   tm_layout( # Center title outside bounding box
-    main.title = paste("Suitable Areas for", species_name, "Aquaculture in California EEZs \n          Based on Preferred Temperature and Depth"),
+    main.title = paste("Marine Aquaculture Suitability for", species_name, "in California EEZs"),
      main.title.size = 1.5,
     legend.outside = TRUE, # Place legend outside map frame
     legend.outside.position = "right", # Place legend to right
@@ -564,15 +614,17 @@ tm_shape(area_eez) +
    outer.margins = c(0.01, 0.25, 0.01, 0.05) 
 
     ) + 
-   tm_scale_bar( # Add scale bar for scale
-     position = c(-.01, 0.08))  +
-   # Move 1% from left and 8% from bottom 
+   tm_scale_bar( # Add scale bar 
+     position = c(-.01, 0.08),    # Move 1% from left and 8% from bottom 
+
+     breaks = seq(0, 600, 150)) +
+  
    tm_compass( # Add compass for orientation
-     type = "8star",        
-     position = c("right", "top"))
+     type = "4star",        
+     position = c("right", "top")) + 
+    tm_basemap("Esri.OceanBasemap")
 
   }
-
 
 
 # outputs:
@@ -584,5 +636,12 @@ tm_shape(area_eez) +
 
 ```{r}
 # Call function 
+species_pref_map <- species_preference(min_temp = 8, max_temp = 18, min_depth = -25, max_depth = 0, species_name = "Red Abalone")
+
+species_pref_map 
+
+tmap_save(species_pref_map, filename = "figs/species_pref_map.png", width= 8, height= 10)
 
 ```
+
+![](figs/species_pref_map.png)
