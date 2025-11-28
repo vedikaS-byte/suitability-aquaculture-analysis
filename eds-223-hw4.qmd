@@ -96,7 +96,7 @@ sst <- rast(sst_years)
 names(sst)
 #class(sst)
 #class(depth)
-plot(sst)
+#plot(sst)
 ```
 
 Double check CRS
@@ -207,9 +207,6 @@ ext(depth) == ext(depth_sst_crop)
 # crop depth to sst extent
 plot(depth_sst_crop)
 plot(depth)
-#tm_shape(depth_sst_crop) + tm_raster()
-#tm_shape(depth) + tm_raster()
-
 ext(depth_sst_crop) == ext(depth)
 
 ```
@@ -240,7 +237,6 @@ avg_sst_reclass <- classify(avg_sst, rcl = reclass_matrix_sst)
 
 plot(avg_sst_reclass)
 
-# create a raster mask? suitable vs unsuitable?
 
 
 
@@ -292,7 +288,6 @@ multiply <- function(x,y){
 avg_sst_depth <- lapp(x = c(avg_sst_reclass,depth_reclass), fun = multiply)
 plot(avg_sst_depth)
 
-view(avg_sst_depth)
 #tm_shape(avg_sst_depth) + tm_raster()
 res(avg_sst_reclass) == res(depth_reclass)
 
@@ -356,6 +351,7 @@ plot(avg_sst_depth_suitable)
 
 
 crs(eez) == crs(avg_sst_depth_suitable) 
+#plot(avg_sst_depth_suitable)
 ```
 
 ```{r}
@@ -369,37 +365,47 @@ suitable_cells_eez <-  mask(avg_sst_depth_suitable, eez)
 # cell_area <- cellSize(avg_sst_depth_suitable, unit = "km")
 cell_area <- cellSize(suitable_cells_eez, unit = "km")
 
-# mask areas by suitability 
+# mask areas by suitability (suitable areas within zones)
 # keep area only for suitable cells
 #suitable_area <- cell_area * avg_sst_depth_suitable
 suitable_area <- cell_area * suitable_cells_eez
 
 # sum suitable area in each eez polygon
 # this will return data frame
-#ea <- extract(suitable_area, eez, fun = sum, na.rm = TRUE)
 #ea <- extract(suitable_area, eez_rast, fun = sum, na.rm = TRUE)
-area_eez<- zonal(cellarea * suitable_cells_eez, eez_rast, fun = "sum", na.rm = T) %>%  rename(suitable_area_km2 = area)
-
-# join extracted results back to eez
 eez_sf <- st_as_sf(eez) # to have geometry
-eez_joined <- eez_sf %>%
-  left_join(area_eez, by = "rgn_id")
 
-# convert back to spatvector
-eez_final <- vect(eez_joined)
+area_eez <- zonal(cell_area * suitable_cells_eez, eez_rast, fun = "sum", na.rm = T) %>%  rename(suitable_area_km2 = area) %>% as.data.frame() %>% left_join(eez_sf, by = "rgn")
 
+area_eez <- area_eez %>% st_as_sf()
+
+
+# # join extracted results back to eez
+#eez_sf <- st_as_sf(eez) # to have geometry
+# 
+# eez_joined <- eez_sf %>%
+#   left_join(area_eez, by = "rgn")
+# 
+# # convert back to spatvector
+# eez_final <- vect(eez_joined)
 ```
 
 ```{r}
 # plot
-tm_shape(eez_final) +
+# count for each state as label 
+# basemap
+tm_shape(area_eez) +
   tm_polygons(
     "suitable_area_km2",
-    palette = "-mako",
-    style = "cont", # Continuous
+    palette = "-mako", # reverse blue
+    style = "cont", # continuous (styles referenced here: https://r-tmap.github.io/tmap-book/visual-variables.html )
+    #fill.scale = tm_scale_continuous(values = "-suitable_area_km2"), # reverse scale
     title = "Suitable Area (km²)"
-  ) +  tm_text("rgn", size = 0.5, col = "white", fontface = "bold",  xmod = -.5) +
-tm_layout( # Center title outside bounding box
+  ) +  
+  
+  tm_text("rgn", size = 0.5, col = "white", fontface = "bold",  xmod = -.5) +
+  
+  tm_layout( # Center title outside bounding box
     main.title = "Suitable Areas for Oyster Aquaculture in California EEZs \n          Based on Preferred Temperature and Depth",
      main.title.size = 1.5,
     legend.outside = TRUE, # Place legend outside map frame
@@ -420,7 +426,7 @@ tm_layout( # Center title outside bounding box
 ```{r}
 # table with kableextra for zonal stats 
 # need: region and total area covered as well as how many places within each region
-eez_final %>% st_as_sf() %>% st_drop_geometry %>% 
+area_eez %>% st_as_sf() %>% st_drop_geometry %>% 
   dplyr::select(region = rgn,
          suitable_area_km2,
          total_area_km2 = area_km2
@@ -432,7 +438,15 @@ kable(caption = "Amount of Suitable Areas by EEZ for Oyster Preferences") %>%
                 position = "center")
 ```
 
-## Create a generalizable funciton 
+## Create a generalized function
+
+```{r}
+# define multiply function for raster
+multiply <- function(x,y){ 
+  multi_raster <- x*y
+  return(multi_raster)
+  }
+```
 
 ```{r}
 # To make your workflow generalizable, you must create a function that has the following characteristics:
@@ -445,11 +459,118 @@ kable(caption = "Amount of Suitable Areas by EEZ for Oyster Preferences") %>%
 # species preferences defined before function
 species_preference <- function(min_temp, max_temp, min_depth, max_depth, species_name){ 
   
-  # assume files have been loaded in already with matching crs checks
+### # assume files have been loaded in already with matching crs checks
   
+###____________________________________________________________
+### data processing
+# Mean sst
+depth <- project(depth, sst)
+avg_sst <- mean(sst)
+
+avg_sst <- avg_sst - 273.15
+
+# match crs
+crs(avg_sst) == crs(depth) # match
+
+
+#avg_sst <- project(avg_sst, depth)
+
+depth_sst_crop <- crop(depth, avg_sst)
+
+depth_sst_crop <- resample(depth_sst_crop, avg_sst, method = "near")
+#depth_sst_crop <- project(depth_sst_crop, avg_sst)
+
+# preferred range: 
+#sea surface temperature: 11-30°C
+
+## reclassify avg_sst
+# reclass matrix 
+reclass_matrix_sst <- matrix(
+  c(-Inf, min_temp, 0,
+    min_temp, max_temp, 1, 
+    max_temp, Inf, 0),
+  ncol = 3, 
+  byrow = T
+)
+
+avg_sst_reclass <- classify(avg_sst, rcl = reclass_matrix_sst)
+
+# same for depth 
+reclass_matrix_depth <- matrix(
+  c(-Inf, min_depth, 0,
+    min_depth, max_depth, 1, 
+    max_depth, Inf, 0),
+  ncol = 3, 
+  byrow = T
+)
+
+depth_reclass <- classify(depth_sst_crop, rcl = reclass_matrix_depth)
+
+###___________________________
+# find locations that satisfy both SST and depth conditions
+
+avg_sst_depth <- lapp(x = c(avg_sst_reclass,depth_reclass), fun = multiply)
+
+## Part 4: find suitable locations within EEZ
+#crs(eez) == crs(avg_sst_depth) # not match, reproject
+eez <- project(eez, avg_sst_depth)
+
+
+
+# rasterize eez regions
+eez_rast <- rasterize(eez, avg_sst_depth_suitable, field = "rgn")
+
+# identify suitable cells in mask 
+suitable_cells_eez <-  mask(avg_sst_depth_suitable, eez)
+
+#calculate cell areas (m^2)
+# cell_area <- cellSize(avg_sst_depth_suitable, unit = "km")
+cell_area <- cellSize(suitable_cells_eez, unit = "km")
+
+# mask areas by suitability (suitable areas within zones)
+# keep area only for suitable cells
+suitable_area <- cell_area * suitable_cells_eez
+
+# sum suitable area in each eez polygon
+# this will return data frame
+#ea <- extract(suitable_area, eez_rast, fun = sum, na.rm = TRUE)
+eez_sf <- st_as_sf(eez) # to have geometry
+
+area_eez <- zonal(cell_area * suitable_cells_eez, eez_rast, fun = "sum", na.rm = T) %>%  rename(suitable_area_km2 = area) %>% as.data.frame() %>% left_join(eez_sf, by = "rgn")
+
+area_eez <- area_eez %>% st_as_sf()
+
+
+####### now create map
+# count for each state as label 
+# basemap
+tm_shape(area_eez) +
+  tm_polygons(
+    "suitable_area_km2",
+    palette = "-mako", # reverse blue
+    style = "cont", # continuous (styles referenced here: https://r-tmap.github.io/tmap-book/visual-variables.html )
+    #fill.scale = tm_scale_continuous(values = "-suitable_area_km2"), # reverse scale
+    title = "Suitable Area (km²)"
+  ) +  
   
+  tm_text("rgn", size = 0.5, col = "white", fontface = "bold",  xmod = -.5) +
   
-  
+  tm_layout( # Center title outside bounding box
+    main.title = paste("Suitable Areas for", species_name, "Aquaculture in California EEZs \n          Based on Preferred Temperature and Depth"),
+     main.title.size = 1.5,
+    legend.outside = TRUE, # Place legend outside map frame
+    legend.outside.position = "right", # Place legend to right
+    component.autoscale = FALSE, # Disable autoscaling for title
+   outer.margins = c(0.01, 0.25, 0.01, 0.05) 
+
+    ) + 
+   tm_scale_bar( # Add scale bar for scale
+     position = c(-.01, 0.08))  +
+   # Move 1% from left and 8% from bottom 
+   tm_compass( # Add compass for orientation
+     type = "8star",        
+     position = c("right", "top"))
+
   }
 
 
@@ -458,5 +579,10 @@ species_preference <- function(min_temp, max_temp, min_depth, max_depth, species
 # map of EEZ regions colored by amount of suitable area
 # species name should be included in the map’s title
 
+
+```
+
+```{r}
+# Call function 
 
 ```
