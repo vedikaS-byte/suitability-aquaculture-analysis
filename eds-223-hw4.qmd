@@ -34,39 +34,36 @@ species of your choice.]{.underline} Suitable locations will be
 determined based on range of suitable sea surface temperature (SST) and
 depth values for the species.
 
-## Description
+## Purpose
 
-To make your workflow generalizable, you must create a function that has
-the following characteristics:
+There is a growing need to sustain populations with food . One approach
+is harnessing marine aqualtculture. Aquaculture is defined as the
+(SOURCE). There is a great potential for aquaculture to offer benefits
+to supporting populations. In California, aquaculture is extremely
+diverse in production systems, cultured species, and products ( ).
 
--   **arguments:**
+Oysters and red abalone are two commercially important species of
+interest in California aquaculture. Oysters a have a defined range
+average SST of and depth of . Red abolne thrive in .
 
-    -   minimum and maximum sea surface temperature
-
-    -   minimum and maximum depth
-
-    -   species name
-
--   **outputs:**
-
-    -   map of EEZ regions colored by amount of suitable area
-
-        -   species name should be included in the map’s title
+The purpose of this assignment is to evaluate the suitability of West
+Coast Exclusive Economic Zones (EEZs) for developing marine aquaculture
+for multiple oyster species and an additional selected species, red
+abalone. Suitable locations are determined based on species-specific
+ranges of sea surface temperature (SST) and depth. The assignment
+incorporates methods for working with both vector and raster data,
+including raster resampling and masking, as well as the application of
+map algebra techniques. The project consists of two components: (1)
+following a standardized workflow to create a final map of suitable
+oyster aquaculture areas in West Coast EEZs, and (2) developing a
+function that generates maps of suitability by EEZ based on user defined
+temperature ranges, depth limits, and species selection.
 
 ## Part 1: Map of Suitable Locations for Oyster Aquaculture
 
-### **Prepare data**
+### **Data Preparation**
 
-To start, we need to load all necessary data and make sure it has the
-coordinate reference system.
-
--   shapefile for the West Coast EEZ
-
--   bathymetry raster
-
--   SST rasters
-
-    -   combine SST rasters into a raster stack
+1.  Load in the necessary packages.
 
 ```{r}
 #| output: false
@@ -79,34 +76,42 @@ library(ggplot2) # Load "ggplot2" for data visualization
 library(tmap) # Load "tmap" for functions to create and layer maps
 library(kableExtra) # Load "kableExtra" for table formatting
 library(stars) # Load "stars" for integration with "sf"
-library(raster) 
-library(terra) 
+library(terra) # Load "terra" for SpatVector and SpatRaster operations
 ```
 
+2.  Load in the spatial data:
+    2.  Use `vect()` to read in the West Coast EEZ shapefile.
+
+    3.  Use `rast()` to read in the bathymetry layer as a SpatRaster.
+
+    4.  Create a list of the SST `tif` files using `list.files()`. Then,
+        combine the SST rasters into a raster stack using `rast()`.
+
 ```{r}
+#| output: false
 # West Coast EEZ
 eez <- vect(here::here("data", "wc_regions_clean.shp"))
 ```
 
 ```{r}
+#| output: false
 # Bathymetry raster
 depth <- rast(here::here("data", "depth.tif"))
 ```
 
 ```{r}
+#| output: false
 # Create a list of the tiff files for SST
 sst_years <- list.files(path="data/", # File path
                         pattern = "average_annual", # File names matching pattern
                         full.names = TRUE) # Reference entire file names matching                                             this pattern
-# Stack all rasters (stack() used earlier)
+
+# Stack all rasters
 sst <- rast(sst_years)
-names(sst)
-#class(sst)
-#class(depth)
-#plot(sst)
 ```
 
-Double check CRS
+3.  Pass conditional checks to transform any mismatching CRS for a
+    spatial object to the reference CRS (`eez`) using `st_crs()`.
 
 ```{r}
 # Create list of spatial objects
@@ -137,203 +142,136 @@ if (st_crs(spatial_objects$sst) != ref_crs) {
 } else {
   message("sst CRS already matches eez CRS.")
 }
-
 ```
 
-### **Process data**
+### **Data Processing**
 
-Next, we need to process the SST and depth data so that they can be
-combined. In this case the SST and depth data have slightly different
-resolutions, extents, and positions.
+The following steps to process the SST and depth data are required prior
+to being combined.
 
--   find the mean SST from 2008-2012 (e.g. create single raster of
-    average SST)
+3.  Reproject the depth dataset to match the SST coordinate reference
+    system (CRS) so the layers align spatially and can be analyzed
+    together accurately. Then, create a single raster of average SST
+    from 2008-2012 using `mean()`.
 
 ```{r}
-# Mean sst
-#sst <- project(sst, depth)
+# Reproject to match sst CRS
 depth <- project(depth, sst)
 
+# Calculate average SST among all rasters
 avg_sst <- mean(sst)
-plot(avg_sst)
 ```
 
--   convert average SST from Kelvin to Celsius
-
-    -   hint: subtract by 273.15
+4.  Subtract 273.15 from the single average SST raster (`avg_sst`) to
+    convert average temperatures from Kelvin to Celsius.
 
 ```{r}
+# Update avg_sst in degrees Celsius
 avg_sst <- avg_sst - 273.15
-plot(avg_sst) 
 ```
 
--   crop depth raster to match the extent of the SST raster
-
--   note: the resolutions of the SST and depth data do not match
-
-    -   resample the depth data to match the resolution of the SST data
-        using the nearest neighbor approach
+5.  Ensure that both rasters match in terms of their CRS, resolutions,
+    and extents prior to cropping.
 
 ```{r}
-# Depth has slightly different resolutions, need to resample
-?resample # Use raster version
-#depth_resampled <- resample(depth, sst, method = "near")
-#plot(depth_resampled)
+# Do the CRS match?
+print(paste("Do the CRS match:", crs(avg_sst) == crs(depth)))
+
+# Do the resolutions match (require resampling)? 
+print(paste("Do the resolutions match:", res(avg_sst) == res(depth)))
+
+# Do the extents match?
+print(paste("Do the extents match:", ext(depth) == ext(avg_sst)))
 ```
 
--   check that the depth and SST match in resolution, extent, and
-    coordinate reference system
-
-    -   hint: can the rasters be stacked?
+6.  Crop the `depth` raster to match the extent of the `avg_sst` raster,
+    then resample the cropped raster (`depth_sst_crop`) to match the
+    resolution of `avg_sst` using the nearest neighbor method.
 
 ```{r}
-# match crs
-crs(avg_sst) == crs(depth) # match
-
-
-#avg_sst <- project(avg_sst, depth)
-
+# Use crop() to crop depth to the extent of avg_sst
 depth_sst_crop <- crop(depth, avg_sst)
 
+# Resample with nearest neighbor method
 depth_sst_crop <- resample(depth_sst_crop, avg_sst, method = "near")
-#depth_sst_crop <- project(depth_sst_crop, avg_sst)
-
-
-
-# Check again...
-crs(avg_sst) == crs(depth) # do not match
-#crs(avg_sst) == crs(depth_sst) # do not match
-
-# Don't match, so resample
-#res(avg_sst) == res(depth)
-
-# cannot be stacked since extents do not match... after resample, crop
-c(depth_sst_crop, avg_sst) 
-# extent do not match... need to crop BUT after resampling
-# crop first 
-ext(depth) == ext(depth_sst_crop)
-
 ```
 
-```{r}
-# crop depth to sst extent
-plot(depth_sst_crop)
-plot(depth)
-ext(depth_sst_crop) == ext(depth)
+### **Finding suitable locations**
 
-```
-
-### **Find suitable locations**
-
-To find suitable locations for marine aquaculture, we’ll need to find
-locations that are suitable in terms of both SST and depth.
-
--   reclassify SST and depth data into locations that are suitable for
-    oysters
-
-    -   hint: set suitable values to `1` and unsuitable values to `0`
+7.  Reclassify `avg_sst` and `depth` using a defined reclassification
+    matrix for the oyster-specific SST and depth range in `classify()`.
+    The reclassification matrix should set suitable values to `1` and
+    unsuitable values to `0`.
 
 ```{r}
-# preferred range: 
-#sea surface temperature: 11-30°C
+# Preferred oyster range for SST: 11-30°C
 
-## reclassify avg_sst
-# reclass matrix 
+# Define reclass matrix for un/suitable SST
 reclass_matrix_sst <- matrix(
-  c(-Inf, 11, 0,
-    11, 30, 1, 
-    30, Inf, 0),
-  ncol = 3, 
-  byrow = T
+  c(-Inf, 11, 0, # Negative infinity (unbounded) to 11 degrees assigned 0
+    11, 30, 1, # 11-30 degrees assigned 1
+    30, Inf, 0), # 30 to infinity (unbounded) assigned 0
+  ncol = 3, # Create three columns
+  byrow = T # Fill by row 
 )
 
+# Assign reclassified values to avg_sst
 avg_sst_reclass <- classify(avg_sst, rcl = reclass_matrix_sst)
-
-plot(avg_sst_reclass)
-
-
-
-
 ```
 
 ```{r}
-## Now, reclassify depth
+# Preferred oyster range for depth: 0-70 meters below sea level
 
-#depth: 0-70 meters below sea level
-
-# reclass matrix 
+# Define reclass matrix for un/suitable depth
 reclass_matrix_depth <- matrix(
-  c(-Inf, -70, 0,
-    -70, 0, 1, 
-    0, Inf, 0),
-  ncol = 3, 
-  byrow = T
+  c(-Inf, -70, 0, # -70 used for values below sea level
+    -70, 0, 1, # Suitable values assigned 1 for -70-0
+    0, Inf, 0), # > 0 assigned unsuitable (0)
+  ncol = 3,# Create three columns
+  byrow = T # Fill by row  
 )
 
+# Assign reclassified values to depth
 depth_reclass <- classify(depth_sst_crop, rcl = reclass_matrix_depth)
-plot(depth_reclass)
-
-# make sure extent match
 ```
 
--   find locations that satisfy both SST and depth conditions
+8.  Identify suitable (value = `1`) and unsuitable locations (value =
+    `0`) for both reclassified SST and depth by defining a function that
+    multiplies two rasters. Then, stack the reclassified layers with
+    `lapp()` and apply the function to generate a combined binary
+    suitability raster.
 
 ```{r}
-# crop extent? 
-# crs(depth) == crs(avg_sst)
-# 
-# 
-# ext(depth) == ext(avg_sst)
-
-# can they be stacked?
-c(depth_reclass, avg_sst_reclass)
-crs(depth_reclass) == crs(avg_sst_reclass)
-
-# need to find BOTH locations... need to filter for suitable locations then join?
-# suitable areas with raster multiplication
-?lapp
-
-#lapp(x = c(avg_sst_reclass,depth_reclass), fun = func(x,y) retunx*y)
+# Create multiplication function to reference in lapp
 multiply <- function(x,y){ 
-  multi_raster <- x*y
+  multi_raster <- x*y # Raster multiplication across all cells
   return(multi_raster)
   }
+```
 
-avg_sst_depth <- lapp(x = c(avg_sst_reclass,depth_reclass), fun = multiply)
-plot(avg_sst_depth)
-
-#tm_shape(avg_sst_depth) + tm_raster()
-res(avg_sst_reclass) == res(depth_reclass)
-
-
+```{r}
+# Return suitable (1) and unsuitable (0) cells 
+avg_sst_depth <- lapp(
+  x = c(avg_sst_reclass,depth_reclass), # Stack rasters
+  fun = multiply) # Apply multiplication function 
 ```
 
 ### **Determine the most suitable EEZ**
 
-We want to determine the total suitable area within each EEZ in order to
-rank zones by priority. To do so, we need to find the total area of
-suitable locations within each EEZ.
+In order to rank zones by priority, it was important to determine the
+total suitable area within each EEZ. The total area of suitable
+locations within each EEZ was calculated using the following steps.
 
--   select suitable cells within West Coast EEZs
-
--   find area of grid cells
-
--   find the total suitable area within each EEZ
-
-    -   hint: it might be helpful to rasterize the EEZ data
+9.  Project `eez` to match the CRS of `avg_sst_depth.`
 
 ```{r}
-## suitable cells within west coast eezs
-# Note: eez is an sf.. convert to terra?
-#eez_vect <- vect(eez)
-
-#plot(eez)
-crs(eez) == crs(avg_sst_depth) # not match, reproject
+# Project
 eez <- project(eez, avg_sst_depth)
-crs(eez) == crs(avg_sst_depth) # now match, reproject
-
-
 ```
+
+
+
+
 
 ```{r}
  # eez_rast <- rasterize(eez, avg_sst_depth_suitable, field = "rgn")
@@ -359,26 +297,33 @@ crs(eez) == crs(avg_sst_depth) # now match, reproject
 
 ```
 
+10. Use `ifel()` to identify suitable cells within the West Coast EEZs by replacing values of `0` with `NA` (unsuitable) and converting all remaining values to `1` (suitable).
+
 ```{r}
-# Find areas of interest
-avg_sst_depth_suitable <- ifel(avg_sst_depth == 0, NA, 1)
-
-plot(avg_sst_depth_suitable)
-
-
-crs(eez) == crs(avg_sst_depth_suitable) 
-#plot(avg_sst_depth_suitable)
+# Select suitable areas
+avg_sst_depth_suitable <- ifel(avg_sst_depth == 0, 
+                               NA, # Replace with NA
+                               1) # Otherwise assign "1"
 ```
 
+11. Calculate the total suitable aquaculture area (km²) within each EEZ by masking, calculating cell areas, and summing suitable raster cells by region. 
+  a. Rasterize each EEZ such that each pixel is labeled with its EEZ region. Rasterizing eez is crucial in this step because vector EEZ polygons are needed to operate in raster space so area can be summarized per region using raster-based functions (ex.` zonal()`).
+
 ```{r}
-# rasterize eez regions
-eez_rast <- rasterize(eez, avg_sst_depth_suitable, field = "rgn")
+# Rasterize eez regions
+eez_rast <- rasterize(eez, avg_sst_depth_suitable, 
+                      field = "rgn") # By region
+```
 
-# identify suitable cells in mask 
+  b. Create a mask to keep only raster values inside EEZ boundaries and remove everything outside by setting it to `NA.`
+```{r}
+# Identify suitable cells in mask 
 suitable_cells_eez <-  mask(avg_sst_depth_suitable, eez)
+```
+  c. Create a raster using cellSize() where each cell contains its surface area in km. 
 
-#calculate cell areas (m^2)
-# cell_area <- cellSize(avg_sst_depth_suitable, unit = "km")
+```{r}
+# Calculate cell areas (km^2)
 cell_area <- cellSize(suitable_cells_eez, unit = "km")
 
 # mask areas by suitability (suitable areas within zones)
@@ -406,6 +351,8 @@ area_eez <- area_eez %>% st_as_sf()
 # eez_final <- vect(eez_joined)
 ```
 
+
+
 ```{r}
 # plot
 # count for each state as label 
@@ -422,7 +369,7 @@ tm_shape(area_eez) +
   tm_text("rgn", size = 0.5, col = "white", fontface = "bold",  xmod = -.5) +
   
   tm_layout( # Center title outside bounding box
-    main.title = "Suitable Areas for Oyster Aquaculture in California EEZs \n          Based on Preferred Temperature and Depth",
+    main.title = "Marine Aquaculture Suitability for Oysters in West Coast EEZs",
      main.title.size = 1.5,
     legend.outside = TRUE, # Place legend outside map frame
     legend.outside.position = "right", # Place legend to right
@@ -431,11 +378,12 @@ tm_shape(area_eez) +
 
     ) + 
    tm_scale_bar( # Add scale bar for scale
-     position = c(-.01, 0.08))  +
+     position = c(-.01, 0.08), 
+      breaks = seq(0, 500, 150))  +
    # Move 1% from left and 8% from bottom 
    tm_compass( # Add compass for orientation
      type = "8star",        
-     position = c("right", "top"))
+     position = c("right", "top")) + tm_basemap("Esri.OceanBasemap")
 
 ```
 
@@ -454,11 +402,28 @@ kable(caption = "Amount of Suitable Areas by EEZ for Oyster Preferences") %>%
                 position = "center")
 ```
 
-## Part 2: Generalized Function of Aquaculture-Important Species Preferences
+## Part 2: Generalized Function of Aquaculture for Species Preferences
 
 1.  Need to clear environment
 2.  Define cells to have as context prior to function
 3.  Run function for regenerated map
+
+To make your workflow generalizable, you must create a function that has
+the following characteristics:
+
+-   **arguments:**
+
+    -   minimum and maximum sea surface temperature
+
+    -   minimum and maximum depth
+
+    -   species name
+
+-   **outputs:**
+
+    -   map of EEZ regions colored by amount of suitable area
+
+        -   species name should be included in the map’s title
 
 ```{r}
 # clear environment
@@ -466,30 +431,49 @@ kable(caption = "Amount of Suitable Areas by EEZ for Oyster Preferences") %>%
 ```
 
 ```{r}
-# load in libraries again
-library(here) # Load "here" to locate and reference files
-library(tidyverse) # Load the tidyverse" for data cleaning
-library(sf) # Load "sf" for GIS analysis
-library(raster) # Load "raster" for accessing raster data types
-library(ggplot2) # Load "ggplot2" for data visualization
-library(tmap) # Load "tmap" for functions to create and layer maps
-library(kableExtra) # Load "kableExtra" for table formatting
-library(stars) # Load "stars" for integration with "sf"
-#library(raster) 
-library(terra) 
-```
-
-```{r}
 # Load in data again
 
+# West Coast EEZ
+eez <- vect(here::here("data", "wc_regions_clean.shp"))
 
+# Bathymetry raster
+depth <- rast(here::here("data", "depth.tif"))
 
-
-
+# Create a list of the tiff files for SST
+sst_years <- list.files(path="data/", # File path
+                        pattern = "average_annual", # File names matching pattern
+                        full.names = TRUE) # Reference entire file names matching                                             this pattern
+# Stack all rasters (stack() used earlier)
+sst <- rast(sst_years)
 ```
 
 ```{r}
 # perform checks for matching CRS
+# Create list of spatial objects
+spatial_objects <- list(eez, depth, sst)
+
+# Use eez's CRS as reference
+ref_crs <- st_crs(spatial_objects$eez)
+
+# Check and transform each tile with if/else statements
+if (st_crs(spatial_objects$depth) != ref_crs) {
+  warning("depth CRS does not match. 
+          Transforming to match eez CRS.")
+  spatial_objects$depth <- st_transform(spatial_objects$depth, ref_crs)
+} else {
+  message("depth CRS already matches eez CRS.")
+}
+
+
+# Check and transform each tile with if/else statements
+if (st_crs(spatial_objects$sst) != ref_crs) {
+  warning("sst CRS does not match. 
+          Transforming to match eez CRS.")
+  spatial_objects$sst <- st_transform(spatial_objects$sst, ref_crs)
+} else {
+  message("sst CRS already matches eez CRS.")
+}
+
 ```
 
 ```{r}
@@ -586,7 +570,7 @@ suitable_area <- cell_area * suitable_cells_eez
 #ea <- extract(suitable_area, eez_rast, fun = sum, na.rm = TRUE)
 eez_sf <- st_as_sf(eez) # to have geometry
 
-area_eez <- zonal(cell_area * suitable_cells_eez, eez_rast, fun = "sum", na.rm = T) %>%  rename(suitable_area_km2 = area) %>% as.data.frame() %>% left_join(eez_sf, by = "rgn")
+area_eez <- zonal(cell_area * suitable_cells_eez, eez_rast, fun = "sum", na.rm = T) %>%  rename(suitable_area_km2 = area) %>% as_tibble() %>% left_join(eez_sf, by = "rgn")
 
 area_eez <- area_eez %>% st_as_sf()
 
@@ -603,10 +587,10 @@ tm_shape(area_eez) +
     title = "Suitable Area (km²)"
   ) +  
   
-  tm_text("rgn", size = 0.5, col = "white", fontface = "bold",  xmod = -.5) +
+  tm_text("rgn", size = .6, col = "white", fontface = "bold",  xmod = -.5) +
   
   tm_layout( # Center title outside bounding box
-    main.title = paste("Marine Aquaculture Suitability for", species_name, "in California EEZs"),
+    main.title = paste("Marine Aquaculture Suitability for", species_name, "in West Coast EEZs"),
      main.title.size = 1.5,
     legend.outside = TRUE, # Place legend outside map frame
     legend.outside.position = "right", # Place legend to right
@@ -617,7 +601,7 @@ tm_shape(area_eez) +
    tm_scale_bar( # Add scale bar 
      position = c(-.01, 0.08),    # Move 1% from left and 8% from bottom 
 
-     breaks = seq(0, 600, 150)) +
+     breaks = seq(0, 500, 150)) +
   
    tm_compass( # Add compass for orientation
      type = "4star",        
