@@ -1,7 +1,7 @@
 ---
 title: "Ocean Superfarms: Finding the Best Spots to Grow Seafood"
 author: "Vedika Shirtekar" 
-date: "11/28/2025"
+date: "11/30/2025"
 format:
   pdf: 
     code-fold: false
@@ -14,37 +14,41 @@ editor_options:
 
 # **Ocean Superfarms: Finding the Best Spots to Grow Seafood**
 
-## Learning Outcomes
-
-This assignment will reinforce key concepts in geospatial analysis by
-practicing the following:
-
--   combining vector/raster data
-
--   resampling raster data
-
--   masking raster data
-
--   map algebra
-
-For this assignment, you are tasked with determining [which Exclusive
-Economic Zones (EEZ) on the West Coast of the US are best suited to
-developing marine aquaculture for several species of oysters ***and*** a
-species of your choice.]{.underline} Suitable locations will be
-determined based on range of suitable sea surface temperature (SST) and
-depth values for the species.
-
 ## Purpose
 
-There is a growing need to sustain populations with food . One approach
-is harnessing marine aqualtculture. Aquaculture is defined as the
-(SOURCE). There is a great potential for aquaculture to offer benefits
-to supporting populations. In California, aquaculture is extremely
-diverse in production systems, cultured species, and products ( ).
+There is a growing global need to sustainably feed expanding human
+populations, and one promising solution is marine aquaculture.
+Aquaculture is defined as the organized cultivation, feeding,
+propagation, and production of aquatic organisms for commercial,
+recreational, or public use (Alleway et al., 2018). The aquaculture
+industry has significant potential to support food security while also
+contributing to conservation and economic development. In California,
+aquaculture is highly diverse in its production systems, cultured
+species, and final products, accounting for approximately 6% of the
+total value of the U.S. aquaculture industry (Wright et al., 2025).
+Wright et al. identify four main sectors within California aquaculture:
+finfish, shellfish, algae, and natural resource agencies. Finfish and
+shellfish production together represent more than 70% of the industry’s
+total value and primarily supply food for human consumption (Wright et
+al., 2025). As a result, commercial aquaculture has become an
+increasingly important and profitable source of marine food production
+in California.
 
-Oysters and red abalone are two commercially important species of
-interest in California aquaculture. Oysters a have a defined range
-average SST of and depth of . Red abolne thrive in .
+Oysters and the critically endangered red abalone are two commercially
+significant species in California aquaculture. Oysters represent the
+largest share of mollusk aquaculture production in the state, followed
+by abalone, mussels, and marine clams, which together comprise the
+remainder of California’s mollusk output (Wright et al., 2025). Although
+oysters are relatively sturdy, they are sensitive to environmental
+conditions and are typically confined to sea surface temperatures (SSTs)
+between 11-30°C and water depths ranging from 0-70 meters below sea
+level (Oliver, 2025). The critically endangered red abalone (*Haliotis
+rufescens*), a marine gastropod, thrives in cooler SSTs of 8-18°C and is
+generally limited to depths of 0-25 meters below sea level (SeaBase,
+n.d.). Both species inhabit waters along the U.S. West Coast, and
+identifying regions where their suitable environmental ranges overlap
+within Exclusive Economic Zones (EEZs) may help evaluate potential areas
+for sustainable and profitable aquaculture development.
 
 The purpose of this assignment is to evaluate the suitability of West
 Coast Exclusive Economic Zones (EEZs) for developing marine aquaculture
@@ -260,7 +264,8 @@ avg_sst_depth <- lapp(
 ### **Determine the most suitable EEZ**
 
 In order to rank zones by priority, it was important to determine the
-total suitable area within each EEZ. The total area of suitable locations within each EEZ was calculated using the following steps.
+total suitable area within each EEZ. The total area of suitable
+locations within each EEZ was calculated using the following steps.
 
 9.  Project `eez` to match the CRS of `avg_sst_depth.`
 
@@ -269,7 +274,9 @@ total suitable area within each EEZ. The total area of suitable locations within
 eez <- project(eez, avg_sst_depth)
 ```
 
-10. Use `ifel()` to identify suitable cells within the West Coast EEZs by replacing values of `0` with `NA` (unsuitable) and converting all remaining values to `1` (suitable).
+10. Use `ifel()` to identify suitable cells within the West Coast EEZs
+    by replacing values of `0` with `NA` (unsuitable) and converting all
+    remaining values to `1` (suitable).
 
 ```{r}
 # Select suitable areas
@@ -278,8 +285,16 @@ avg_sst_depth_suitable <- ifel(avg_sst_depth == 0,
                                1) # Otherwise assign "1"
 ```
 
-11. Calculate the total suitable aquaculture area (km²) within each EEZ by masking, calculating cell areas, and summing suitable raster cells by region. 
-  a. Rasterize each EEZ such that each pixel is labeled with its EEZ region. Rasterizing eez is crucial in this step because vector EEZ polygons are needed to operate in raster space so area can be summarized per region using raster-based functions (ex.` zonal()`).
+11. Calculate the total suitable aquaculture area (km²) within each EEZ
+    by masking, calculating cell areas, and summing suitable raster
+    cells by region.
+
+<!-- -->
+
+a.  Rasterize each EEZ such that each pixel is labeled with its EEZ
+    region. Rasterizing eez is crucial in this step because vector EEZ
+    polygons are needed to operate in raster space so area can be
+    summarized per region using raster-based functions (ex.`zonal()`).
 
 ```{r}
 # Rasterize eez regions
@@ -287,14 +302,19 @@ eez_rast <- rasterize(eez, avg_sst_depth_suitable,
                       field = "rgn") # By region
 ```
 
-  b. Create a mask to keep only raster values inside EEZ boundaries and remove everything outside by setting it to `NA.`
+b.  Create a mask to keep only raster values inside EEZ boundaries and
+    remove everything outside by setting it to `NA.`
+
 ```{r}
 # Identify suitable cells in mask 
 suitable_cells_eez <-  mask(avg_sst_depth_suitable, eez)
 ```
-  
-  c. Create a raster using `cellSize()` where each cell contains its surface area in km². Then, use ` zonal()` to calculate the total suitable area within each EEZ by summing suitable raster cells areas by zone and joining the results to the eez_sf spatial data.  
-  
+
+c.  Create a raster using `cellSize()` where each cell contains its
+    surface area in km². Then, use `zonal()` to calculate the total
+    suitable area within each EEZ by summing suitable raster cells areas
+    by zone and joining the results to the eez_sf spatial data.
+
 ```{r}
 # Calculate cell areas (km^2)
 cell_area <- cellSize(suitable_cells_eez, unit = "km")
@@ -314,7 +334,8 @@ area_eez <- area_eez %>% st_as_sf()
 
 ```
 
-12. Use `tmap` functions to create a map of suitable area within each EEZ.
+12. Use `tmap` functions to create a map of suitable area within each
+    EEZ.
 
 ```{r}
 #| message: false
@@ -332,7 +353,7 @@ oyster_pref_map <- tm_shape(area_eez) +
   ) +  
   
   tm_text("rgn", # Label by region
-          size = 0.5, # Adjust size
+          size = .8, # Adjust size
           col = "white", # Adjust text color
           fontface = "bold",  # Labels are bolded
           xmod = -.5) + # Adjust .5 from the left
@@ -365,11 +386,13 @@ oyster_pref_map
 tmap_save(oyster_pref_map, filename = "figs/oyster_pref_map.png", width = 8, height = 10)
 ```
 
-![](figs/oyster_pref_map.png)
-**Map 1. Finalized map of suitable aquaculture areas within West Coast EEZs for oysters.**
+![](figs/oyster_pref_map.png) **Map 1. Finalized map of suitable
+aquaculture areas within West Coast EEZs for oysters.**
 
-
-13. Create a table using `kableExtra` to display both the total suitable area and the proportion of each EEZ that is suitable for oyster aquaculture, enabling comparison across regions independent of EEZ size.
+13. Create a table using `kableExtra` to display both the total suitable
+    area and the proportion of each EEZ that is suitable for oyster
+    aquaculture, enabling comparison across regions independent of EEZ
+    size.
 
 ```{r}
 # Table with kableextra for prop of suitable areas to EEZ area
@@ -394,14 +417,22 @@ area_eez %>%
                 position = "center")  # Center labels
 ```
 
-
-
 ## Part 2: Generalized Function of Aquaculture for Species Preferences
-The `species_preference` function applies the generalized workflow (Part 1) to streamline identification of suitable zones based on species-specific sea surface temperature (SST) and depth ranges for any species of interest. The function takes minimum and maximum SST values, minimum and maximum depth limits, and a species name as inputs and returns a map of EEZ regions shaded by total suitable area.
 
-13. Verify coordinate reference systems (CRS) and load required spatial datasets before creating and running the function to ensure all spatial objects are correctly prepared for processing.
+The `species_preference` function applies the generalized workflow
+(Part 1) to streamline identification of suitable zones based on
+species-specific sea surface temperature (SST) and depth ranges for any
+species of interest. The function takes minimum and maximum SST values,
+minimum and maximum depth limits, and a species name as inputs and
+returns a map of EEZ regions shaded by total suitable area.
+
+13. Verify coordinate reference systems (CRS) and load required spatial
+    datasets before creating and running the function to ensure all
+    spatial objects are correctly prepared for processing.
+
 ```{r}
 #| output: false
+#| code-fold: true
 # Load in data again
 
 # West Coast EEZ
@@ -414,12 +445,13 @@ depth <- rast(here::here("data", "depth.tif"))
 sst_years <- list.files(path="data/", # File path
                         pattern = "average_annual", # File names matching pattern
                         full.names = TRUE) # Reference entire file names matching
-this pattern
+                                          #this pattern
 # Stack all rasters (stack() used earlier)
 sst <- rast(sst_years)
 ```
 
 ```{r}
+#| code-fold: true
 # Create list of spatial objects
 spatial_objects <- list(eez, depth, sst)
 
@@ -444,7 +476,9 @@ if (st_crs(spatial_objects$sst) != ref_crs) {
 }
 ```
 
-14. Define the `multiply` function to support raster multiplication within the `species_preference` function when used with `lapp()`.
+14. Define the `multiply` function to support raster multiplication
+    within the `species_preference` function when used with `lapp()`.
+
 ```{r}
 # Define multiply function for global raster multiplication
 multiply <- function(x,y){ 
@@ -453,7 +487,11 @@ multiply <- function(x,y){
   }
 ```
 
-15. Create a function called `species_preference` that incorporates the Part 1 workflow to generate a map of suitable aquaculture areas within West Coast EEZs based on species-specific SST and depth parameters.
+15. Create a function called `species_preference` that incorporates the
+    Part 1 workflow to generate a map of suitable aquaculture areas
+    within West Coast EEZs based on species-specific SST and depth
+    parameters.
+
 ```{r}
 # This function takes arguments:
 # minimum and maximum sea surface temperature
@@ -560,7 +598,7 @@ tm_shape(area_eez) +
   ) +  
   
   tm_text("rgn", # Label by region
-          size = 0.5, # Adjust size
+          size = .8, # Adjust size
           col = "white", # Adjust text color
           fontface = "bold",  # Labels are bolded
           xmod = -.5) + # Adjust .5 from the left
@@ -590,7 +628,6 @@ tm_shape(area_eez) +
 # Map of EEZ regions colored by amount of suitable area
 ```
 
-
 ```{r}
 #| message: false
 #| warning: false
@@ -602,16 +639,11 @@ species_pref_map
 
 ```
 
-
 ```{r}
 #| output: false
 # Save finalized map to figs
 tmap_save(species_pref_map, filename = "figs/species_pref_map.png", width = 8, height = 10)
 ```
 
-
-
-
-
-![](figs/species_pref_map.png)
-**Map 2. Finalized map of suitable aquaculture areas within West Coast EEZs for red abalone.**
+![](figs/species_pref_map.png) **Map 2. Finalized map of suitable
+aquaculture areas within West Coast EEZs for red abalone.**
