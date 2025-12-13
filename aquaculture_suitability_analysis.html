@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="">
+<meta name="dcterms.date" content="2025-12-06">
+
+<title>aquaculture_suitability_analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="aquaculture_suitability_analysis_files/libs/clipboard/clipboard.min.js"></script>
+<script src="aquaculture_suitability_analysis_files/libs/quarto-html/quarto.js"></script>
+<script src="aquaculture_suitability_analysis_files/libs/quarto-html/popper.min.js"></script>
+<script src="aquaculture_suitability_analysis_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="aquaculture_suitability_analysis_files/libs/quarto-html/anchor.min.js"></script>
+<link href="aquaculture_suitability_analysis_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="aquaculture_suitability_analysis_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="aquaculture_suitability_analysis_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="aquaculture_suitability_analysis_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="aquaculture_suitability_analysis_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+<script src="aquaculture_suitability_analysis_files/libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="aquaculture_suitability_analysis_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+<section id="ocean-superfarms-finding-the-best-spots-to-grow-seafood" class="level1">
+<h1>Ocean Superfarms: Finding the Best Spots to Grow Seafood</h1>
+<section id="purpose" class="level2">
+<h2 class="anchored" data-anchor-id="purpose"><strong>Purpose</strong></h2>
+<p><strong>GitHub Repository Link:</strong> <a href="https://github.com/vedikaS-byte/suitability-aquaculture-analysis" class="uri">https://github.com/vedikaS-byte/suitability-aquaculture-analysis</a></p>
+<p>There is a growing global need to sustainably feed expanding human populations, and one promising solution is marine aquaculture. Aquaculture is defined as the organized cultivation, feeding, propagation, and production of aquatic organisms for commercial, recreational, or public use (Alleway et al., 2018). The aquaculture industry has significant potential to support food security while also contributing to conservation and economic development. In California, aquaculture is highly diverse in its production systems, cultured species, and final products, accounting for approximately 6% of the total value of the U.S. aquaculture industry (Wright et al., 2025). Wright et al.&nbsp;identify four main sectors within California aquaculture: finfish, shellfish, algae, and natural resource agencies. Finfish and shellfish production together represent more than 70% of the industry’s total value and primarily supply food for human consumption (Wright et al., 2025). As a result, commercial aquaculture has become an increasingly important and profitable source of marine food production in California.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/kelp_forest.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption"><strong>Figure 1. Kelp forest pictured in Channel Islands National Park (<a href="https://blog.nature.org/2019/01/21/aquaculture-could-be-conservations-secret-weapon/">The Nature Conservancy</a>).</strong></figcaption><p></p>
+</figure>
+</div>
+<p>Oysters and the critically endangered red abalone are two commercially significant species in California aquaculture. Oysters represent the largest share of mollusk aquaculture production in the state, followed by abalone, mussels, and marine clams, which together comprise the remainder of California’s mollusk industry output (Wright et al., 2025). Although oysters are relatively sturdy animals, they are sensitive to environmental conditions and are typically confined to sea surface temperatures (SSTs) between 11-30°C and water depths ranging from 0-70 meters below sea level (Oliver, 2025). The critically endangered red abalone (<em>Haliotis rufescens</em>), a marine gastropod, thrives in cooler SSTs of 8-18°C and is generally limited to depths of 0-25 meters below sea level (SeaBase, n.d.).</p>
+<p>Both oysters and red abalone are known to inhabit waters along the U.S. West Coast. The West Coast includes multiple Exclusive Economic Zones (EEZs), ocean areas extending roughly 230 miles beyond a nation’s territorial sea and where a coastal nation has jurisdiction over both biotic and abiotic resources (NOAA, 2023). As such, identifying regions where their suitable environmental ranges overlap within Exclusive Economic Zones (EEZs) may help evaluate potential areas for sustainable and profitable aquaculture development.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/red-abalone.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption"><strong>Figure 2. The critically endangered and commercially significant red abalone (<a href="https://www.ccgproject.org/species/haliotis-rufescens-red-abalone">California Conservation Genomics Project</a>).</strong></figcaption><p></p>
+</figure>
+</div>
+<p>The purpose of this blog post is to evaluate the suitability of West Coast Exclusive Economic Zones (EEZs) for developing marine aquaculture for multiple oyster species and the red abalone. Suitable locations are identified using species-specific ranges of sea surface temperature (SST) and ocean depth. This project utilizes GIS applications such as working with vector and raster data, raster resampling, masking, and map algebra to analyze environmental conditions. The analysis includes two main components: (1) creating a final map of suitable oyster aquaculture areas, and (2) building a function that allows users to generate suitability maps by EEZ based on selected species, temperature ranges, and depth limits. The following research question was utilized to facilitate the analysis:</p>
+<p><strong>How do changes in species-specific temperature and depth thresholds affect the identification of suitable aquaculture areas within West Coast Exclusive Economic Zones (EEZs) for commercially significant marine species?</strong></p>
+</section>
+<section id="data-description" class="level2">
+<h2 class="anchored" data-anchor-id="data-description">Data Description</h2>
+<p>The Bren School of Environmental Science and Management at the University of California, Santa Barbara provided essential support for this project, including access to data resources, documentation, and technical guidance.</p>
+<p><a href="https://www.sealifebase.ca/search.php">SeaLifeBase</a> is a publicly available online database that provides information on a wide range of marine species based on criteria such as commercial importance and taxonomic group. Each species profile includes details on depth range, temperature preference, geographic distribution, life history, and classification. The database is open access and does not require any downloads to use.</p>
+<p>For this analysis, West Coast Exclusive Economic Zone (EEZ) boundaries were obtained from <a href="https://marineregions.org/">Marineregions.org</a> to define maritime boundaries. The <a href="https://www.gebco.net/data_and_products/gridded_bathymetry_data/#area">General Bathymetric Chart of the Oceans (GEBCO)</a> is a global terrain model that provides geospatial information, such as elevation, for both ocean and land surfaces at a 15-arc-second grid resolution (GEBCO, n.d.). Bathymetry data for this analysis were downloaded from GEBCO as a <code>tif</code> file. This analysis also used satellite-derived average sea surface temperature (SST) data from 2008–2012 to characterize mean SST within each EEZ. Although the GeoTIFF files were provided through course materials, the original data are publicly available from <a href="https://coralreefwatch.noaa.gov/product/5km/index_5km_ssta.php">NOAA’s 5 km Daily Global Satellite Sea Surface Temperature Anomaly v3.1 product</a>.</p>
+</section>
+<section id="part-1-map-of-suitable-locations-for-oyster-aquaculture" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-map-of-suitable-locations-for-oyster-aquaculture"><strong>Part 1: Map of Suitable Locations for Oyster Aquaculture</strong></h2>
+<section id="data-preparation" class="level3">
+<h3 class="anchored" data-anchor-id="data-preparation"><strong>Data Preparation</strong></h3>
+<p>Before beginning my analysis, I loaded the appropriate packages to properly read, manipulate, and work with geospatial data in formats such as <code>sf</code>, <code>SpatRaster</code>, and <code>SpatVector</code>. I used the <code>vect()</code> function to read in the West Coast EEZ shapefile as a vector layer. I imported the bathymetry dataset using the <code>rast()</code> function and stored it as a <code>SpatRaster</code> object. For the sea surface temperature (SST) data, I identified all <code>.tif</code> files using <code>list.files()</code> and combined them into a single raster stack with <code>rast()</code> for further analysis. I also included a conditional check that stops the code if <code>character(0)</code> is returned, indicating that no raster files were found in the directory and that an absolute file path should be specified.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here) <span class="co"># Load "here" to locate and reference files</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># Load the tidyverse" for data cleaning</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf) <span class="co"># Load "sf" for GIS analysis</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(raster) <span class="co"># Load "raster" for accessing raster data types</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2) <span class="co"># Load "ggplot2" for data visualization</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap) <span class="co"># Load "tmap" for functions to create and layer maps</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra) <span class="co"># Load "kableExtra" for table formatting</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stars) <span class="co"># Load "stars" for integration with "sf"</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra) <span class="co"># Load "terra" for SpatVector and SpatRaster operations</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># knitr::opts_knit$set(root.dir = here::here("posts", "aquaculture-post"))</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># getwd()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># West Coast EEZ</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>eez <span class="ot">&lt;-</span> <span class="fu">vect</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"wc_regions_clean.shp"</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Bathymetry raster</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>depth <span class="ot">&lt;-</span> <span class="fu">rast</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"depth.tif"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a list of the tiff files for SST</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>sst_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>( <span class="co"># Define file path</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Pattern matches all tiff files starting with   "average_annual"</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern =</span> <span class="st">"average_annual.*</span><span class="sc">\\</span><span class="st">.tif$"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">full.names =</span> T </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Stop running if character(0) returned</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(sst_files) <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">"No SST raster files found in directory."</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Stack raster files</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>sst <span class="ot">&lt;-</span> <span class="fu">rast</span>(sst_files)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>It is critical to ensure that the coordinate reference system (CRS) of all geospatial objects match to avoid misalignment, inaccurate measurements, and errors during spatial analysis. Here, I used conditional statements with <code>st_crs()</code> to detect and resolve any CRS mismatches between spatial objects and to display a message when mismatches were found.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create list of spatial objects</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>spatial_objects <span class="ot">&lt;-</span> <span class="fu">list</span>(eez, depth, sst)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Use eez's CRS as reference</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>ref_crs <span class="ot">&lt;-</span> <span class="fu">st_crs</span>(spatial_objects<span class="sc">$</span>eez)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check and transform each tile with if/else statements</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">st_crs</span>(spatial_objects<span class="sc">$</span>depth) <span class="sc">!=</span> ref_crs) {</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">warning</span>(<span class="st">"depth CRS does not match. </span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="st">          Transforming to match eez CRS."</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  spatial_objects<span class="sc">$</span>depth <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(spatial_objects<span class="sc">$</span>depth, ref_crs)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"depth CRS already matches eez CRS."</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="do">## depth CRS already matches eez CRS.</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">st_crs</span>(spatial_objects<span class="sc">$</span>sst) <span class="sc">!=</span> ref_crs) {</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">warning</span>(<span class="st">"sst CRS does not match. </span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="st">          Transforming to match eez CRS."</span>)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  spatial_objects<span class="sc">$</span>sst <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(spatial_objects<span class="sc">$</span>sst, ref_crs)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"sst CRS already matches eez CRS."</span>)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="do">## sst CRS already matches eez CRS.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="data-processing" class="level3">
+<h3 class="anchored" data-anchor-id="data-processing"><strong>Data Processing</strong></h3>
+<p>Before combining the SST and depth data, it was necessary to conduct several preprocessing steps to ensure accurate spatial alignment and analysis. I first projected the depth dataset to match the SST CRS to ensure proper spatial alignment. Then, I created a single raster representing average SST from 2008–2012 using the <code>mean()</code> function and converted the average temperature from Kelvin to Celsius by globally subtracting 273.15 K from all raster values. To prepare the datasets for analysis, I ensured both rasters matched in terms of a shared CRS, resolution, and extent. Then, I cropped and resampled (<code>resample()</code>) the depth raster to the SST boundary to match the resolution of the average SST raster using the nearest neighbor method.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reproject to match sst CRS</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>depth <span class="ot">&lt;-</span> <span class="fu">project</span>(depth, sst)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate average SST among all rasters</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>avg_sst <span class="ot">&lt;-</span> <span class="fu">mean</span>(sst)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Update avg_sst in degrees Celsius</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>avg_sst <span class="ot">&lt;-</span> avg_sst <span class="sc">-</span> <span class="fl">273.15</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Do the CRS match?</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"Do the CRS match:"</span>, <span class="fu">crs</span>(avg_sst) <span class="sc">==</span> <span class="fu">crs</span>(depth))</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="do">## Do the CRS match:TRUE</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Do the resolutions match (require resampling)? </span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"Do the resolutions match:"</span>, <span class="fu">res</span>(avg_sst) <span class="sc">==</span> <span class="fu">res</span>(depth))</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="do">## Do the resolutions match:TRUETRUE</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Do the extents match?</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"Do the extents match: "</span>, <span class="fu">ext</span>(avg_sst) <span class="sc">==</span> <span class="fu">ext</span>(depth))</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="do">## Do the extents match: TRUE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use crop() to crop depth to the extent of avg_sst</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>depth_sst_crop <span class="ot">&lt;-</span> <span class="fu">crop</span>(depth, avg_sst)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Resample with nearest neighbor method</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>depth_sst_crop <span class="ot">&lt;-</span> <span class="fu">resample</span>(depth_sst_crop, avg_sst, <span class="at">method =</span> <span class="st">"near"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="finding-suitable-locations" class="level3">
+<h3 class="anchored" data-anchor-id="finding-suitable-locations"><strong>Finding Suitable Locations</strong></h3>
+<p>To identify suitable aquaculture locations, I reclassified the average SST and depth rasters using oyster-specific temperature and depth thresholds in <code>classify()</code>, where suitable values were assigned a value of 1 and unsuitable values a value of 0. I then defined a function to combine both layers by multiplying the reclassified rasters to identify areas that met both environmental requirements. Finally, I stacked the reclassified SST and depth layers using <code>lapp()</code> and applied the function to generate a single binary raster showing overall suitability. The output raster <code>avg_sst_depth</code> is a <code>SpatRaster</code> with binary values of 0 and 1.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preferred oyster range for SST: 11-30°C</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define reclass matrix for un/suitable SST</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>reclass_matrix_sst <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">11</span>, <span class="dv">0</span>, <span class="co"># Negative infinity (unbounded) to 11 degrees assigned 0</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="dv">11</span>, <span class="dv">30</span>, <span class="dv">1</span>, <span class="co"># 11-30 degrees assigned 1</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="dv">30</span>, <span class="cn">Inf</span>, <span class="dv">0</span>), <span class="co"># 30 to infinity (unbounded) assigned 0</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">ncol =</span> <span class="dv">3</span>, <span class="co"># Create three columns</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">byrow =</span> T <span class="co"># Fill by row </span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign reclassified values to avg_sst</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>avg_sst_reclass <span class="ot">&lt;-</span> <span class="fu">classify</span>(avg_sst, <span class="at">rcl =</span> reclass_matrix_sst)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preferred oyster range for depth: 0-70 meters below sea level</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define reclass matrix for un/suitable depth</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>reclass_matrix_depth <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="sc">-</span><span class="dv">70</span>, <span class="dv">0</span>, <span class="co"># -70 used for values below sea level</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span><span class="dv">70</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="co"># Suitable values assigned 1 for -70-0</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span>, <span class="cn">Inf</span>, <span class="dv">0</span>), <span class="co"># &gt; 0 assigned unsuitable (0)</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">ncol =</span> <span class="dv">3</span>,<span class="co"># Create three columns</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">byrow =</span> T <span class="co"># Fill by row  </span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign reclassified values to depth</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>depth_reclass <span class="ot">&lt;-</span> <span class="fu">classify</span>(depth_sst_crop, <span class="at">rcl =</span> reclass_matrix_depth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create multiplication function to reference in lapp</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>multiply <span class="ot">&lt;-</span> <span class="cf">function</span>(x,y){ </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  multi_raster <span class="ot">&lt;-</span> x<span class="sc">*</span>y <span class="co"># Raster multiplication across all cells</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(multi_raster)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Return suitable (1) and unsuitable (0) cells </span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>avg_sst_depth <span class="ot">&lt;-</span> <span class="fu">lapp</span>(</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">c</span>(avg_sst_reclass,depth_reclass), <span class="co"># Stack rasters</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">fun =</span> multiply) <span class="co"># Apply multiplication function </span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Print binary raster </span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>avg_sst_depth</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+size        : 480, 408, 1  (nrow, ncol, nlyr)
+resolution  : 0.04166185, 0.04165702  (x, y)
+extent      : -131.9848, -114.9867, 29.99305, 49.98842  (xmin, xmax, ymin, ymax)
+coord. ref. : lon/lat WGS 84 
+source(s)   : memory
+name        : lyr1 
+min value   :    0 
+max value   :    1 </code></pre>
+</div>
+</div>
+</section>
+<section id="determining-the-most-suitable-eez" class="level3">
+<h3 class="anchored" data-anchor-id="determining-the-most-suitable-eez"><strong>Determining the Most Suitable EEZ</strong></h3>
+<p>In order to rank EEZ zones by aquaculture potential, it was important to determine the total suitable area within each EEZ. I calculated the total suitable area within each zone, then projected the EEZ shapefile to match the CRS of the suitability raster (<code>avg_sst_depth</code>). I then utilized the <code>ifel()</code> function to identify suitable cells within the EEZs by reclassifying values of 0 as <code>NA</code> (unsuitable) and converting all remaining values to 1 (suitable), allowing only viable areas to be included in the following calculations.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Project</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>eez <span class="ot">&lt;-</span> <span class="fu">project</span>(eez, avg_sst_depth)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Select suitable areas</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>avg_sst_depth_suitable <span class="ot">&lt;-</span> <span class="fu">ifel</span>(avg_sst_depth <span class="sc">==</span> <span class="dv">0</span>, </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                               <span class="cn">NA</span>, <span class="co"># Replace with NA</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                               <span class="dv">1</span>) <span class="co"># Otherwise assign "1"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Next, I calculated the total suitable aquaculture area (km²) within each EEZ by masking, calculating cell area, and summarizing suitability by region. It was necessary to rasterize the <code>eez</code> <code>SpatVector</code> because vector EEZ polygons must be represented in raster space to allow area summarization per region using raster-based functions. I utilized <code>rasterize()</code> to convert the EEZ polygons so that each raster cell was labeled by region, enabling area calculations with zonal statistics. Additionally, I created a mask to include only raster values within the EEZ regions, excluding any areas outside these boundaries. The resulting raster contained the surface area of each cell, calculated using <code>cellSize()</code>. Finally, I used <code>zonal()</code> to sum the area of suitable cells for each EEZ and joined the results back to the spatial reference dataset (<code>eez_sf</code>) to visualize the distribution of suitable aquaculture areas using <code>tmap</code>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rasterize eez regions</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>eez_rast <span class="ot">&lt;-</span> <span class="fu">rasterize</span>(eez, avg_sst_depth_suitable, </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">field =</span> <span class="st">"rgn"</span>) <span class="co"># By region</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify suitable cells in mask </span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>suitable_cells_eez <span class="ot">&lt;-</span>  <span class="fu">mask</span>(avg_sst_depth_suitable, eez)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate cell areas (km^2)</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>cell_area <span class="ot">&lt;-</span> <span class="fu">cellSize</span>(suitable_cells_eez, <span class="at">unit =</span> <span class="st">"km"</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to sf object</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>eez_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(eez) <span class="co"># To have geometry</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>area_eez <span class="ot">&lt;-</span> <span class="fu">zonal</span>(cell_area <span class="sc">*</span> suitable_cells_eez, <span class="co"># Identify area of suitable locations </span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>                  eez_rast, <span class="co"># Rasterized eez</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fun =</span> <span class="st">"sum"</span>, <span class="at">na.rm =</span> T) <span class="sc">%&gt;%</span>  <span class="co"># Sum areas of cells within each EEZ zone </span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">suitable_area_km2 =</span> area) <span class="sc">%&gt;%</span> <span class="co"># Rename for naming conventions</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> <span class="co"># Convert to data frame</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(eez_sf, <span class="at">by =</span> <span class="st">"rgn"</span>) <span class="co"># Join on region</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert back into sf so eez data (includes calculated suitable area) for mapping</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>area_eez <span class="ot">&lt;-</span> area_eez <span class="sc">%&gt;%</span> <span class="fu">st_as_sf</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create map</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>oyster_pref_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(area_eez) <span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"suitable_area_km2"</span>, <span class="co"># Color by suitable_area_km2 variable</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">palette =</span> <span class="st">"-mako"</span>, <span class="co"># Reverse blue scale</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="st">"cont"</span>, <span class="co"># Continuous scale (styles referenced:</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">#https://r-tmap.github.io/tmap-book/visual-variables.html)</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="fu">expression</span>(</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Suitable Area"</span><span class="sc">~</span><span class="st">"("</span><span class="sc">~</span> km<span class="sc">^</span><span class="dv">2</span><span class="sc">~</span><span class="st">")"</span>) <span class="co"># Rename legend title</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span>  </span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_text</span>(<span class="st">"rgn"</span>, <span class="co"># Label by region</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> .<span class="dv">5</span>, <span class="co"># Adjust size</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>          <span class="at">col =</span> <span class="st">"white"</span>, <span class="co"># Adjust text color</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">fontface =</span> <span class="st">"bold"</span>,  <span class="co"># Labels are bolded</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>          <span class="at">xmod =</span> <span class="sc">-</span>.<span class="dv">5</span>) <span class="sc">+</span> <span class="co"># Adjust .5 from the left</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>( <span class="co"># Center title outside bounding box</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">main.title =</span> <span class="st">"Marine Aquaculture Suitability for Oysters in West Coast EEZs"</span>,</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>     <span class="at">main.title.size =</span> <span class="fl">1.2</span>, <span class="co"># Adjust title size</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.outside =</span> <span class="cn">TRUE</span>, <span class="co"># Place legend outside map frame</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.outside.position =</span> <span class="st">"right"</span>, <span class="co"># Place legend to right</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">component.autoscale =</span> <span class="cn">FALSE</span>, <span class="co"># Disable autoscaling for title</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">outer.margins =</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.25</span>, <span class="fl">0.01</span>, <span class="fl">0.05</span>) <span class="co"># Manually adjust map frame</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span> </span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>   <span class="fu">tm_scale_bar</span>( <span class="co"># Add scale bar for scale</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>     <span class="at">position =</span> <span class="fu">c</span>(<span class="sc">-</span>.<span class="dv">01</span>, <span class="fl">0.08</span>),   <span class="co"># Move 1% from left and 8% from bottom </span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>     <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">500</span>, <span class="dv">150</span>)) <span class="sc">+</span> <span class="co"># Establish scale bar ranges</span></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>     <span class="fu">tm_compass</span>( <span class="co"># Add compass for orientation</span></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"4star"</span>,        </span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>     <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"right"</span>, <span class="st">"top"</span>)) <span class="sc">+</span> <span class="co"># Adjust position</span></span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_basemap</span>(<span class="st">"Esri.OceanBasemap"</span>) <span class="co"># Ocean basemap</span></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Print map</span></span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>oyster_pref_map</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="aquaculture_suitability_analysis_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><strong>Map 1. Suitable aquaculture areas within West Coast EEZs for oysters.</strong></p>
+<p>The suitable area for oyster harvesting relative to the total area of each EEZ region was also examined. I created a table using <code>kableExtra</code> to display both the total suitable area and the proportion of each EEZ that is suitable for oyster aquaculture, allowing for comparisons across regions independent of EEZ size.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Table with kableextra for prop of suitable areas to EEZ area</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>area_eez <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  st_drop_geometry <span class="sc">%&gt;%</span>  <span class="co"># Drop geometry</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="at">region =</span> rgn, <span class="co"># Select region</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>         suitable_area_km2, <span class="co"># Select suitable area</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">total_area_km2 =</span> area_km2 <span class="co"># Rename to total_area</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>         ) <span class="sc">%&gt;%</span>   </span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Update suitable_area to be rounded to nearest hundreth</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">suitable_area_km2 =</span> <span class="fu">round</span>(suitable_area_km2, <span class="dv">2</span>), </span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>         <span class="co"># Create new variable for prop of suitable area to total EEZ area</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">percent_suitable =</span> <span class="fu">round</span>((suitable_area_km2 <span class="sc">/</span> total_area_km2) <span class="sc">*</span> <span class="dv">100</span>, </span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>                                  <span class="dv">1</span>)) <span class="sc">%&gt;%</span> <span class="co"># Round to nearest tenth</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>total_area_km2) <span class="sc">%&gt;%</span> <span class="co"># Deselect total_area</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Rename columns</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Region"</span> <span class="ot">=</span> region,</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>     <span class="st">"Suitable Area (km^2)"</span> <span class="ot">=</span> suitable_area_km2, </span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Proportion of Suitable Area in EEZ"</span> <span class="ot">=</span> percent_suitable</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    )  <span class="sc">%&gt;%</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Enable title</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Amount of Suitable Areas by EEZ for Oyster Preferences"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Allow table to be striped with highlight option</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>),</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="co"># Disable full width </span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>                <span class="at">position =</span> <span class="st">"center"</span>)  <span class="co"># Center labels</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+
+<table class="table table-striped table-hover" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>Amount of Suitable Areas by EEZ for Oyster Preferences</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Region </th>
+   <th style="text-align:right;"> Suitable Area (km^2) </th>
+   <th style="text-align:right;"> Proportion of Suitable Area in EEZ </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Central California </td>
+   <td style="text-align:right;"> 3656.82 </td>
+   <td style="text-align:right;"> 1.8 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Northern California </td>
+   <td style="text-align:right;"> 194.13 </td>
+   <td style="text-align:right;"> 0.1 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Oregon </td>
+   <td style="text-align:right;"> 1028.90 </td>
+   <td style="text-align:right;"> 0.6 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Southern California </td>
+   <td style="text-align:right;"> 3062.20 </td>
+   <td style="text-align:right;"> 1.5 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Washington </td>
+   <td style="text-align:right;"> 2435.93 </td>
+   <td style="text-align:right;"> 3.6 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</section>
+</section>
+<section id="part-2-generalized-function-of-aquaculture-for-species-preferences" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-generalized-function-of-aquaculture-for-species-preferences"><strong>Part 2: Generalized Function of Aquaculture for Species Preferences</strong></h2>
+<p>The workflow observed in Part 1 is applicable to any species of interest to generate maps of suitable aquaculture areas within West Coast EEZs based on species-specific temperature and depth ranges. To make this process reproducible, I created the <code>species_preference</code> function to streamline identification of suitable zones for any species. The function takes minimum and maximum SST values, minimum and maximum depth limits, and a species name as inputs, and returns a map of EEZ regions shaded by total suitable area.</p>
+<p>It is important to note that <code>species_preference</code> performs calculations only based on the specific inputs provided, such as reclassification and average SST conversion. Therefore, I reloaded all spatial objects and verified that they shared the same CRS to ensure they were correctly prepared for processing within the function.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load in data again</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># West Coast EEZ</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>eez <span class="ot">&lt;-</span> <span class="fu">vect</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"wc_regions_clean.shp"</span>))</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Bathymetry raster</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>depth <span class="ot">&lt;-</span> <span class="fu">rast</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"depth.tif"</span>))</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a list of the tiff files for SST</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>sst_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>( <span class="co"># Define file path</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>),</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Pattern matches all tiff files starting with   "average_annual"</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern =</span> <span class="st">"average_annual.*</span><span class="sc">\\</span><span class="st">.tif$"</span>,</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">full.names =</span> T </span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Stop running if character(0) returned</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(sst_files) <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">"No SST raster files found in directory."</span>)</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Stack raster files</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>sst <span class="ot">&lt;-</span> <span class="fu">rast</span>(sst_files)</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Create list of spatial objects</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>spatial_objects <span class="ot">&lt;-</span> <span class="fu">list</span>(eez, depth, sst)</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Use eez's CRS as reference</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>ref_crs <span class="ot">&lt;-</span> <span class="fu">st_crs</span>(spatial_objects<span class="sc">$</span>eez)</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Check and transform each tile with if/else statements</span></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">st_crs</span>(spatial_objects<span class="sc">$</span>depth) <span class="sc">!=</span> ref_crs) {</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">warning</span>(<span class="st">"depth CRS does not match. Transforming to match eez CRS."</span>)</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>  spatial_objects<span class="sc">$</span>depth <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(spatial_objects<span class="sc">$</span>depth, ref_crs)</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"depth CRS already matches eez CRS."</span>)</span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Check and transform each tile with if/else statements</span></span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">st_crs</span>(spatial_objects<span class="sc">$</span>sst) <span class="sc">!=</span> ref_crs) {</span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">warning</span>(<span class="st">"sst CRS does not match. Transforming to match eez CRS."</span>)</span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a>  spatial_objects<span class="sc">$</span>sst <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(spatial_objects<span class="sc">$</span>sst, ref_crs)</span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"sst CRS already matches eez CRS."</span>)</span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>I also redefined the <code>multiply</code> function to support raster multiplication within the <code>species_preference</code> function when used with <code>lapp()</code>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define multiply function for global raster multiplication</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>multiply <span class="ot">&lt;-</span> <span class="cf">function</span>(x,y){ </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  multi_raster <span class="ot">&lt;-</span> x<span class="sc">*</span>y</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(multi_raster)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The following code cells demonstrate the integrated workflow used in the <code>species_preference</code> function to generate a map of suitable aquaculture areas within West Coast EEZs based on species-specific SST and depth parameters. I applied the function using the temperature and depth ranges for red abalone to produce a map analogous to the one for suitable oyster aquaculture areas.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This function takes arguments:</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># minimum and maximum sea surface temperature</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># minimum and maximum depth</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># species name</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>species_preference <span class="ot">&lt;-</span> <span class="cf">function</span>(min_temp, max_temp, min_depth, max_depth, species_name){ </span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="do">### Assume files have been loaded in already with matching CRS checks</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="do">###____________________________________________________________</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="do">### Data processing</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Reproject to match sst CRS</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>depth <span class="ot">&lt;-</span> <span class="fu">project</span>(depth, sst)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate average SST among all rasters</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>avg_sst <span class="ot">&lt;-</span> <span class="fu">mean</span>(sst)</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Update avg_sst in degrees Celsius</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>avg_sst <span class="ot">&lt;-</span> avg_sst <span class="sc">-</span> <span class="fl">273.15</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Use crop() to crop depth to the extent of avg_sst</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>depth_sst_crop <span class="ot">&lt;-</span> <span class="fu">crop</span>(depth, avg_sst)</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Resample with nearest neighbor method</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>depth_sst_crop <span class="ot">&lt;-</span> <span class="fu">resample</span>(depth_sst_crop, avg_sst, <span class="at">method =</span> <span class="st">"near"</span>)</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a><span class="do">###____________________________________________________________</span></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a><span class="do">### Find suitable locations</span></span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Define reclass matrix for un/suitable SST</span></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>reclass_matrix_sst <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, min_temp, <span class="dv">0</span>, <span class="co"># Negative infinity (unbounded) to min_temp</span></span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>    min_temp, max_temp, <span class="dv">1</span>, <span class="co"># min-max temp assigned 1</span></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>    max_temp, <span class="cn">Inf</span>, <span class="dv">0</span>), <span class="co"># max_temp to infinity (unbounded) assigned 0</span></span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">ncol =</span> <span class="dv">3</span>, <span class="co"># Create three columns</span></span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">byrow =</span> T <span class="co"># Fill by row </span></span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign reclassified values to avg_sst</span></span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>avg_sst_reclass <span class="ot">&lt;-</span> <span class="fu">classify</span>(avg_sst, <span class="at">rcl =</span> reclass_matrix_sst)</span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Define reclass matrix for un/suitable depth</span></span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a>reclass_matrix_depth <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, min_depth, <span class="dv">0</span>, <span class="co"># Negative infinity (unbounded) to min_temp (below sea level)</span></span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>    min_depth, max_depth, <span class="dv">1</span>, <span class="co"># min-max depth assigned 1</span></span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a>    max_depth, <span class="cn">Inf</span>, <span class="dv">0</span>), <span class="co"># &gt; max_depth assigned unsuitable (0)</span></span>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">ncol =</span> <span class="dv">3</span>,<span class="co"># Create three columns</span></span>
+<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">byrow =</span> T <span class="co"># Fill by row  </span></span>
+<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign reclassified values to depth</span></span>
+<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a>depth_reclass <span class="ot">&lt;-</span> <span class="fu">classify</span>(depth_sst_crop, <span class="at">rcl =</span> reclass_matrix_depth)</span>
+<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Return suitable (1) and unsuitable (0) cells </span></span>
+<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a>avg_sst_depth <span class="ot">&lt;-</span> <span class="fu">lapp</span>(</span>
+<span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">c</span>(avg_sst_reclass,depth_reclass), <span class="co"># Stack rasters</span></span>
+<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a>  <span class="at">fun =</span> multiply) <span class="co"># Apply multiplication function </span></span>
+<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-60"><a href="#cb17-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-61"><a href="#cb17-61" aria-hidden="true" tabindex="-1"></a><span class="do">###____________________________________________________________</span></span>
+<span id="cb17-62"><a href="#cb17-62" aria-hidden="true" tabindex="-1"></a><span class="do">### Determine most suitable locations within EEZs</span></span>
+<span id="cb17-63"><a href="#cb17-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-64"><a href="#cb17-64" aria-hidden="true" tabindex="-1"></a><span class="co"># Project</span></span>
+<span id="cb17-65"><a href="#cb17-65" aria-hidden="true" tabindex="-1"></a>eez <span class="ot">&lt;-</span> <span class="fu">project</span>(eez, avg_sst_depth)</span>
+<span id="cb17-66"><a href="#cb17-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-67"><a href="#cb17-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Select suitable areas</span></span>
+<span id="cb17-68"><a href="#cb17-68" aria-hidden="true" tabindex="-1"></a>avg_sst_depth_suitable <span class="ot">&lt;-</span> <span class="fu">ifel</span>(avg_sst_depth <span class="sc">==</span> <span class="dv">0</span>, </span>
+<span id="cb17-69"><a href="#cb17-69" aria-hidden="true" tabindex="-1"></a>                               <span class="cn">NA</span>, <span class="co"># Replace with NA</span></span>
+<span id="cb17-70"><a href="#cb17-70" aria-hidden="true" tabindex="-1"></a>                               <span class="dv">1</span>) <span class="co"># Otherwise assign "1"</span></span>
+<span id="cb17-71"><a href="#cb17-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-72"><a href="#cb17-72" aria-hidden="true" tabindex="-1"></a><span class="co"># Rasterize eez regions</span></span>
+<span id="cb17-73"><a href="#cb17-73" aria-hidden="true" tabindex="-1"></a>eez_rast <span class="ot">&lt;-</span> <span class="fu">rasterize</span>(eez, avg_sst_depth_suitable, </span>
+<span id="cb17-74"><a href="#cb17-74" aria-hidden="true" tabindex="-1"></a>                      <span class="at">field =</span> <span class="st">"rgn"</span>) <span class="co"># By region</span></span>
+<span id="cb17-75"><a href="#cb17-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-76"><a href="#cb17-76" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify suitable cells in mask </span></span>
+<span id="cb17-77"><a href="#cb17-77" aria-hidden="true" tabindex="-1"></a>suitable_cells_eez <span class="ot">&lt;-</span>  <span class="fu">mask</span>(avg_sst_depth_suitable, eez)</span>
+<span id="cb17-78"><a href="#cb17-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-79"><a href="#cb17-79" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate cell areas (km^2)</span></span>
+<span id="cb17-80"><a href="#cb17-80" aria-hidden="true" tabindex="-1"></a>cell_area <span class="ot">&lt;-</span> <span class="fu">cellSize</span>(suitable_cells_eez, <span class="at">unit =</span> <span class="st">"km"</span>)</span>
+<span id="cb17-81"><a href="#cb17-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-82"><a href="#cb17-82" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to sf object</span></span>
+<span id="cb17-83"><a href="#cb17-83" aria-hidden="true" tabindex="-1"></a>eez_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(eez) <span class="co"># To have geometry</span></span>
+<span id="cb17-84"><a href="#cb17-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-85"><a href="#cb17-85" aria-hidden="true" tabindex="-1"></a>area_eez <span class="ot">&lt;-</span> <span class="fu">zonal</span>(cell_area <span class="sc">*</span> suitable_cells_eez, <span class="co"># Identify area of suitable locations </span></span>
+<span id="cb17-86"><a href="#cb17-86" aria-hidden="true" tabindex="-1"></a>                  eez_rast, <span class="co"># Rasterized eez</span></span>
+<span id="cb17-87"><a href="#cb17-87" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fun =</span> <span class="st">"sum"</span>, <span class="at">na.rm =</span> T) <span class="sc">%&gt;%</span>  <span class="co"># Sum areas of cells within each EEZ zone </span></span>
+<span id="cb17-88"><a href="#cb17-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">suitable_area_km2 =</span> area) <span class="sc">%&gt;%</span> <span class="co"># Rename for naming conventions</span></span>
+<span id="cb17-89"><a href="#cb17-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> <span class="co"># Convert to data frame</span></span>
+<span id="cb17-90"><a href="#cb17-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(eez_sf, <span class="at">by =</span> <span class="st">"rgn"</span>) <span class="co"># Join on region</span></span>
+<span id="cb17-91"><a href="#cb17-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-92"><a href="#cb17-92" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert back into sf so eez data (includes calculated suitable area) for mapping</span></span>
+<span id="cb17-93"><a href="#cb17-93" aria-hidden="true" tabindex="-1"></a>area_eez <span class="ot">&lt;-</span> area_eez <span class="sc">%&gt;%</span> <span class="fu">st_as_sf</span>()</span>
+<span id="cb17-94"><a href="#cb17-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-95"><a href="#cb17-95" aria-hidden="true" tabindex="-1"></a><span class="do">###____________________________________________________________</span></span>
+<span id="cb17-96"><a href="#cb17-96" aria-hidden="true" tabindex="-1"></a><span class="do">### Create map of suitable areas within EEZs</span></span>
+<span id="cb17-97"><a href="#cb17-97" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(area_eez) <span class="sc">+</span></span>
+<span id="cb17-98"><a href="#cb17-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(</span>
+<span id="cb17-99"><a href="#cb17-99" aria-hidden="true" tabindex="-1"></a>    <span class="st">"suitable_area_km2"</span>, <span class="co"># Color by suitable_area_km2 variable</span></span>
+<span id="cb17-100"><a href="#cb17-100" aria-hidden="true" tabindex="-1"></a>    <span class="at">palette =</span> <span class="st">"-mako"</span>, <span class="co"># Reverse blue scale</span></span>
+<span id="cb17-101"><a href="#cb17-101" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="st">"cont"</span>, <span class="co"># Continuous scale </span></span>
+<span id="cb17-102"><a href="#cb17-102" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="fu">expression</span>(</span>
+<span id="cb17-103"><a href="#cb17-103" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Suitable Area"</span><span class="sc">~</span><span class="st">"("</span><span class="sc">~</span> km<span class="sc">^</span><span class="dv">2</span><span class="sc">~</span><span class="st">")"</span>) <span class="co">#Rename legend title</span></span>
+<span id="cb17-104"><a href="#cb17-104" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span>  </span>
+<span id="cb17-105"><a href="#cb17-105" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_text</span>(<span class="st">"rgn"</span>, <span class="co"># Label by region</span></span>
+<span id="cb17-106"><a href="#cb17-106" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> .<span class="dv">5</span>, <span class="co"># Adjust size</span></span>
+<span id="cb17-107"><a href="#cb17-107" aria-hidden="true" tabindex="-1"></a>          <span class="at">col =</span> <span class="st">"white"</span>, <span class="co"># Adjust text color</span></span>
+<span id="cb17-108"><a href="#cb17-108" aria-hidden="true" tabindex="-1"></a>          <span class="at">fontface =</span> <span class="st">"bold"</span>,  <span class="co"># Labels are bolded</span></span>
+<span id="cb17-109"><a href="#cb17-109" aria-hidden="true" tabindex="-1"></a>          <span class="at">xmod =</span> <span class="sc">-</span>.<span class="dv">5</span>) <span class="sc">+</span> <span class="co"># Adjust .5 from the left</span></span>
+<span id="cb17-110"><a href="#cb17-110" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-111"><a href="#cb17-111" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>( <span class="co"># Center title outside bounding box</span></span>
+<span id="cb17-112"><a href="#cb17-112" aria-hidden="true" tabindex="-1"></a>    <span class="at">main.title =</span> <span class="fu">paste</span>(<span class="st">"Marine Aquaculture Suitability for"</span>,</span>
+<span id="cb17-113"><a href="#cb17-113" aria-hidden="true" tabindex="-1"></a>                        species_name, <span class="co"># Include species name in title</span></span>
+<span id="cb17-114"><a href="#cb17-114" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"in West Coast EEZs"</span>),</span>
+<span id="cb17-115"><a href="#cb17-115" aria-hidden="true" tabindex="-1"></a>     <span class="at">main.title.size =</span> <span class="fl">1.2</span>, <span class="co"># Adjust title size</span></span>
+<span id="cb17-116"><a href="#cb17-116" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.outside =</span> <span class="cn">TRUE</span>, <span class="co"># Place legend outside map frame</span></span>
+<span id="cb17-117"><a href="#cb17-117" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.outside.position =</span> <span class="st">"right"</span>, <span class="co"># Place legend to right</span></span>
+<span id="cb17-118"><a href="#cb17-118" aria-hidden="true" tabindex="-1"></a>    <span class="at">component.autoscale =</span> <span class="cn">FALSE</span>, <span class="co"># Disable autoscaling for title</span></span>
+<span id="cb17-119"><a href="#cb17-119" aria-hidden="true" tabindex="-1"></a>    <span class="at">outer.margins =</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.25</span>, <span class="fl">0.01</span>, <span class="fl">0.05</span>) <span class="co"># Manually adjust map frame</span></span>
+<span id="cb17-120"><a href="#cb17-120" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span> </span>
+<span id="cb17-121"><a href="#cb17-121" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-122"><a href="#cb17-122" aria-hidden="true" tabindex="-1"></a>   <span class="fu">tm_scale_bar</span>( <span class="co"># Add scale bar for scale</span></span>
+<span id="cb17-123"><a href="#cb17-123" aria-hidden="true" tabindex="-1"></a>     <span class="at">position =</span> <span class="fu">c</span>(<span class="sc">-</span>.<span class="dv">01</span>, <span class="fl">0.08</span>),   <span class="co"># Move 1% from left and 8% from bottom </span></span>
+<span id="cb17-124"><a href="#cb17-124" aria-hidden="true" tabindex="-1"></a>     <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">500</span>, <span class="dv">150</span>)) <span class="sc">+</span> <span class="co"># Establish scale bar ranges</span></span>
+<span id="cb17-125"><a href="#cb17-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-126"><a href="#cb17-126" aria-hidden="true" tabindex="-1"></a>     <span class="fu">tm_compass</span>( <span class="co"># Add compass for orientation</span></span>
+<span id="cb17-127"><a href="#cb17-127" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"4star"</span>,        </span>
+<span id="cb17-128"><a href="#cb17-128" aria-hidden="true" tabindex="-1"></a>     <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"right"</span>, <span class="st">"top"</span>)) <span class="sc">+</span> <span class="co"># Adjust position</span></span>
+<span id="cb17-129"><a href="#cb17-129" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_basemap</span>(<span class="st">"Esri.OceanBasemap"</span>) <span class="co"># Ocean basemap</span></span>
+<span id="cb17-130"><a href="#cb17-130" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-131"><a href="#cb17-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-132"><a href="#cb17-132" aria-hidden="true" tabindex="-1"></a><span class="co"># Output:</span></span>
+<span id="cb17-133"><a href="#cb17-133" aria-hidden="true" tabindex="-1"></a><span class="co"># Map of EEZ regions colored by amount of suitable area</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Call function for Red Abalone and preferred temp/depth range</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>species_pref_map <span class="ot">&lt;-</span> <span class="fu">species_preference</span>(<span class="at">min_temp =</span> <span class="dv">8</span>, </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">max_temp =</span> <span class="dv">18</span>, </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">min_depth =</span> <span class="sc">-</span><span class="dv">25</span>, </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">max_depth =</span> <span class="dv">0</span>, </span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">species_name =</span> <span class="st">"Red Abalone"</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Print map </span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>species_pref_map</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="aquaculture_suitability_analysis_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><strong>Map 2. Suitable aquaculture areas within West Coast EEZs for red abalone.</strong></p>
+</section>
+<section id="reflection" class="level2">
+<h2 class="anchored" data-anchor-id="reflection">Reflection</h2>
+<p>For oysters species along the West Coast, Central California is the most suitable EEZ with about 3,656.82 km<sup>2</sup> of suitable area while Northern California is the least suitable EEZ with about 194.13 km<sup>2</sup> of suitable area. Central California likely offers the most favorable SST and depth conditions for oyster cultivation. Notably, the Washington EEZ has a larger suitable area (1,028.90 km²) than Northern California despite its colder location, indicating a higher proportion of habitat appropriate for mollusk aquaculture. Central and Southern California also show relatively high suitability. Oregon’s EEZ contains substantial suitable area as well, though less than most other regions.</p>
+<p>The red abalone, a critically endangered marine gastropod, is a commercially valuable species with strong potential for aquaculture. The Washington EEZ appears especially promising for red abalone cultivation, with more than 1,500 km² of suitable area, likely due to the colder water temperatures preferred by the species. Interestingly, Central and Southern California also contain substantial suitable areas that exceed those of Northern California, despite being further south and having generally warmer conditions; differences in coastal upwelling and nutrient availability may explain this pattern. Red abalone aquaculture also represents a model for sustainable seafood production. For instance, the Monterrey Abalone Company in Central California raises abalone in both marine and land-based systems with minimal use of chemicals and antibiotics (Bailey, 2015). Overall, red abalone farms highlight opportunities for environmentally responsible aquaculture while supporting production in the most suitable West Coast EEZs, particularly in Washington, Central California, and Northern California.</p>
+<p>Several considerations exist for future analysis. The analysis considers the average annual SST and depth, but does not account for seasonal variation that may influence species suitability. Additionally, the <code>species_preference</code> function considers only temperature and depth ranges; other ecological or biological factors (ex. salinity and predation) are not included and are thus simplified. The accruacy of the EEZ polygons are important as they affect results. For example, misaligned or outdated boundaries could mislead researchers into incorrect area calculations. Therefore, an improved analysis would incorporate flexibility for complex species preferences to avoid oversimplification and ensure that geospatial objects are properly aligned, yielding more accurate results.</p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<p>[1] Alleway, H. K., Gillies, C. L., Bishop, M. J., Gentry, R. R., Theuerkauf, S. J., &amp; Jones, R. (2018). <em>The ecosystem services of marine aquaculture: Valuing benefits to people and nature</em>. BioScience, 69(1), 59–68. <a href="https://doi.org/10.1093/biosci/biy137" class="uri">https://doi.org/10.1093/biosci/biy137</a></p>
+<p>[2] California Conservation Genomics Project. (n.d.). <em>Haliotis rufescens (Red Abalone)</em>. Retrieved November 29, 2025, from <a href="https://www.ccgproject.org/species/haliotis-rufescens-red-abalone" class="uri">https://www.ccgproject.org/species/haliotis-rufescens-red-abalone</a></p>
+<p>[3] <em>Gridded bathymetry data</em>. (n.d.). GEBCO. Retrieved November 30, 2025, from <a href="https://www.gebco.net/data-products/gridded-bathymetry-data#area" class="uri">https://www.gebco.net/data-products/gridded-bathymetry-data#area</a></p>
+<p>[4] <em>Haliotis rufescens,&nbsp;Red abalone: Fisheries.</em> (n.d.). Retrieved November 30, 2025, from <a href="https://www.sealifebase.ca/summary/Haliotis-rufescens.html" class="uri">https://www.sealifebase.ca/summary/Haliotis-rufescens.html</a></p>
+<p>[5] Hausheer, J. E. (2023). <em>Aquaculture Could Be Conservation’s Secret Weapon.</em> The Nature Conservancy. Retrieved November 29, 2025, from <a href="https://blog.nature.org/2019/01/21/aquaculture-could-be-conservations-secret-weapon/" class="uri">https://blog.nature.org/2019/01/21/aquaculture-could-be-conservations-secret-weapon/</a></p>
+<p>[6] <em>Marine regions.</em> (n.d.). Retrieved November 28, 2025, from <a href="https://www.marineregions.org/eez.php" class="uri">https://www.marineregions.org/eez.php</a></p>
+<p>[7] <em>Monterey Bay Abalone farm shows what sustainable aquaculture can be like.</em> (n.d.). Earth Island Journal. Retrieved November 29, 2025, from <a href="https://www.earthisland.org/journal/index.php/articles/entry/monterey_bay_abalone_farm_shows_what_sustainable_aquaculture_can_be_like/" class="uri">https://www.earthisland.org/journal/index.php/articles/entry/monterey_bay_abalone_farm_shows_what_sustainable_aquaculture_can_be_like/</a></p>
+<p>[8] <em>NOAA coral reef watch daily 5km satellite coral bleaching heat stress SST anomaly product</em> (version 3.1). (n.d.). Retrieved November 29, 2025, from <a href="https://coralreefwatch.noaa.gov/product/5km/index_5km_ssta.php" class="uri">https://coralreefwatch.noaa.gov/product/5km/index_5km_ssta.php</a></p>
+<p>[9] Oliver, R. (2025). <em>Homework assignment 4.</em> Retrieved November 28, 2025, from <a href="https://eds-223-geospatial.github.io/assignments/HW4.html#fnref1" class="uri">https://eds-223-geospatial.github.io/assignments/HW4.html#fnref1</a></p>
+<p>[10] Wright, A., Moody, C., &amp; Gross, J. (2025). <em>Composition of California’s aquaculture industry and surveying its disease challenges and management strategies.</em> Aquaculture Reports, 42, 102799. Retrieved November 29, 2025, from <a href="https://doi.org/10.1016/j.aqrep.2025.102799" class="uri">https://doi.org/10.1016/j.aqrep.2025.102799</a></p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
